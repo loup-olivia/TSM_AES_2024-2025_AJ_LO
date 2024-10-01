@@ -1,0 +1,30 @@
+name: Build test application
+on:
+  pull_request:
+  push:
+
+jobs:
+  build-cli-v1:
+    container:
+      image: ghcr.io/armmbed/mbed-os-env:master-latest
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        target: [K64F, DISCO_H747I]
+        profile: [release, debug, develop]
+
+
+    steps:
+      -
+        name: checkout
+        uses: actions/checkout@v2
+
+      -
+        name: build-test
+        run: |
+          set -e
+          mbed deploy
+          mbed test -t GCC_ARM -m ${{ matrix.target }} --profile ${{ matrix.profile }} --compile -n tests-simple-test-always-succeed,tests-simple-test-ptr-test
+          mbed compile -t GCC_ARM -m ${{ matrix.target }} --profile ${{ matrix.profile }}
