@@ -1,33 +1,66 @@
 [
     {
-        "module": "[lib]\\c_w.l",
+        "module": "[lib]/Studio\\mbed-studio-tools\\ac6\\bin\\..\\lib\\armlib\\c_w.l",
+        "size": {
+            ".text": 0,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": -4202,
+            ".data-delta": -16,
+            ".bss-delta": -348
+        }
+    },
+    {
+        "module": "[lib]/Studio\\mbed-studio-tools\\ac6\\bin\\..\\lib\\armlib\\fz_wv.l",
+        "size": {
+            ".text": 0,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": -538,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "[lib]/Studio\\mbed-studio-tools\\ac6\\bin\\..\\lib\\libcxx\\libcppabi_w.l",
+        "size": {
+            ".text": 0,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": -44,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "[lib]/c_w.l",
         "size": {
             ".text": 4202,
             ".data": 16,
             ".bss": 348,
-            ".text-delta": 0,
-            ".data-delta": 0,
-            ".bss-delta": 0
+            ".text-delta": 4202,
+            ".data-delta": 16,
+            ".bss-delta": 348
         }
     },
     {
-        "module": "[lib]\\fz_wv.l",
+        "module": "[lib]/fz_wv.l",
         "size": {
             ".text": 538,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 0,
+            ".text-delta": 538,
             ".data-delta": 0,
             ".bss-delta": 0
         }
     },
     {
-        "module": "[lib]\\libcppabi_w.l",
+        "module": "[lib]/libcppabi_w.l",
         "size": {
             ".text": 44,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 0,
+            ".text-delta": 44,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -44,6 +77,39 @@
         }
     },
     {
+        "module": "disco_h747i/CM7",
+        "size": {
+            ".text": 52,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": 52,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "disco_h747i/Drivers",
+        "size": {
+            ".text": 0,
+            ".data": 0,
+            ".bss": 196,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 196
+        }
+    },
+    {
+        "module": "disco_h747i/Wrappers",
+        "size": {
+            ".text": 56,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": 56,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
         "module": "main.o",
         "size": {
             ".text": 222,
@@ -55,7 +121,7 @@
         }
     },
     {
-        "module": "mbed-os\\cmsis",
+        "module": "mbed-os/cmsis",
         "size": {
             ".text": 10375,
             ".data": 168,
@@ -66,7 +132,7 @@
         }
     },
     {
-        "module": "mbed-os\\connectivity",
+        "module": "mbed-os/connectivity",
         "size": {
             ".text": 16,
             ".data": 0,
@@ -77,18 +143,18 @@
         }
     },
     {
-        "module": "mbed-os\\drivers",
+        "module": "mbed-os/drivers",
         "size": {
-            ".text": 3757,
+            ".text": 3701,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 0,
+            ".text-delta": -56,
             ".data-delta": 0,
             ".bss-delta": 0
         }
     },
     {
-        "module": "mbed-os\\hal",
+        "module": "mbed-os/hal",
         "size": {
             ".text": 2260,
             ".data": 8,
@@ -99,7 +165,7 @@
         }
     },
     {
-        "module": "mbed-os\\platform",
+        "module": "mbed-os/platform",
         "size": {
             ".text": 9389,
             ".data": 64,
@@ -110,7 +176,7 @@
         }
     },
     {
-        "module": "mbed-os\\rtos",
+        "module": "mbed-os/rtos",
         "size": {
             ".text": 448,
             ".data": 0,
@@ -121,7 +187,7 @@
         }
     },
     {
-        "module": "mbed-os\\storage",
+        "module": "mbed-os/storage",
         "size": {
             ".text": 54,
             ".data": 0,
@@ -132,22 +198,22 @@
         }
     },
     {
-        "module": "mbed-os\\targets",
+        "module": "mbed-os/targets",
         "size": {
-            ".text": 20132,
+            ".text": 20608,
             ".data": 12,
             ".bss": 1841,
-            ".text-delta": 0,
+            ".text-delta": 476,
             ".data-delta": 0,
             ".bss-delta": 0
         }
     },
     {
         "summary": {
-            "static_ram": 11728,
-            "static_ram_delta": 0,
-            "total_flash": 51737,
-            "total_flash_delta": 0
+            "static_ram": 11924,
+            "static_ram_delta": 196,
+            "total_flash": 52265,
+            "total_flash_delta": 528
         }
     }
 ]
