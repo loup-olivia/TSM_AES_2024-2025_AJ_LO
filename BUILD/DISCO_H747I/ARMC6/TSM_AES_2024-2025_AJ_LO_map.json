@@ -33,6 +33,28 @@
         }
     },
     {
+        "module": "advdembsof_library/display",
+        "size": {
+            ".text": 264,
+            ".data": 0,
+            ".bss": 528,
+            ".text-delta": 264,
+            ".data-delta": 0,
+            ".bss-delta": 528
+        }
+    },
+    {
+        "module": "advdembsof_library/sensors",
+        "size": {
+            ".text": 6,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": 6,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
         "module": "anon$$obj.o",
         "size": {
             ".text": 32,
@@ -57,21 +79,21 @@
     {
         "module": "disco_h747i/Drivers",
         "size": {
-            ".text": 0,
+            ".text": 1078,
             ".data": 0,
-            ".bss": 196,
-            ".text-delta": 0,
+            ".bss": 328,
+            ".text-delta": 1078,
             ".data-delta": 0,
-            ".bss-delta": 0
+            ".bss-delta": 132
         }
     },
     {
         "module": "disco_h747i/Wrappers",
         "size": {
-            ".text": 56,
+            ".text": 88,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 0,
+            ".text-delta": 32,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -79,10 +101,10 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 222,
+            ".text": 216,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 0,
+            ".text-delta": -6,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -134,10 +156,10 @@
     {
         "module": "mbed-os/platform",
         "size": {
-            ".text": 9389,
+            ".text": 9401,
             ".data": 64,
             ".bss": 1136,
-            ".text-delta": 0,
+            ".text-delta": 12,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -167,20 +189,20 @@
     {
         "module": "mbed-os/targets",
         "size": {
-            ".text": 20608,
+            ".text": 21482,
             ".data": 12,
             ".bss": 1841,
-            ".text-delta": 0,
+            ".text-delta": 874,
             ".data-delta": 0,
             ".bss-delta": 0
         }
     },
     {
         "summary": {
-            "static_ram": 11924,
-            "static_ram_delta": 0,
-            "total_flash": 52265,
-            "total_flash_delta": 0
+            "static_ram": 12584,
+            "static_ram_delta": 660,
+            "total_flash": 54525,
+            "total_flash_delta": 2260
         }
     }
 ]

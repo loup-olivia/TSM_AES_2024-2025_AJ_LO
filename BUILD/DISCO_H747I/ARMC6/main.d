@@ -271,4 +271,4 @@ BUILD/DISCO_H747I/ARMC6/main.o: main.cpp \
   mbed-os/platform/include/platform/ScopedRamExecutionLock.h \
   mbed-os/platform/include/platform/mbed_stats.h \
   mbed-os/platform/include/platform/Stream.h \
-  mbed-os/platform/include/platform/FileLike.h
+  mbed-os/platform/include/platform/FileLike.h common/constants.hpp
