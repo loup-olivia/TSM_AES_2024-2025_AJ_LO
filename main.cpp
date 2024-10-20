@@ -4,12 +4,13 @@
  */
 
 #include "mbed.h"
+#include "constants.hpp"
 
 
 // Blinking rate in milliseconds
 #define BLINKING_RATE     500ms
 
-#if !MBED_TEST_MDOE
+#if !MBED_TEST_MODE
 
 int main()
 {
