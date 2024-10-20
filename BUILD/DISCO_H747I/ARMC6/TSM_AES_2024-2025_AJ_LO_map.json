@@ -1,46 +1,13 @@
 [
     {
-        "module": "[lib]/Studio\\mbed-studio-tools\\ac6\\bin\\..\\lib\\armlib\\c_w.l",
-        "size": {
-            ".text": 0,
-            ".data": 0,
-            ".bss": 0,
-            ".text-delta": -4202,
-            ".data-delta": -16,
-            ".bss-delta": -348
-        }
-    },
-    {
-        "module": "[lib]/Studio\\mbed-studio-tools\\ac6\\bin\\..\\lib\\armlib\\fz_wv.l",
-        "size": {
-            ".text": 0,
-            ".data": 0,
-            ".bss": 0,
-            ".text-delta": -538,
-            ".data-delta": 0,
-            ".bss-delta": 0
-        }
-    },
-    {
-        "module": "[lib]/Studio\\mbed-studio-tools\\ac6\\bin\\..\\lib\\libcxx\\libcppabi_w.l",
-        "size": {
-            ".text": 0,
-            ".data": 0,
-            ".bss": 0,
-            ".text-delta": -44,
-            ".data-delta": 0,
-            ".bss-delta": 0
-        }
-    },
-    {
         "module": "[lib]/c_w.l",
         "size": {
             ".text": 4202,
             ".data": 16,
             ".bss": 348,
-            ".text-delta": 4202,
-            ".data-delta": 16,
-            ".bss-delta": 348
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
         }
     },
     {
@@ -49,7 +16,7 @@
             ".text": 538,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 538,
+            ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -60,7 +27,7 @@
             ".text": 44,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 44,
+            ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -82,7 +49,7 @@
             ".text": 52,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 52,
+            ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -95,7 +62,7 @@
             ".bss": 196,
             ".text-delta": 0,
             ".data-delta": 0,
-            ".bss-delta": 196
+            ".bss-delta": 0
         }
     },
     {
@@ -104,7 +71,7 @@
             ".text": 56,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 56,
+            ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -148,7 +115,7 @@
             ".text": 3701,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": -56,
+            ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -203,7 +170,7 @@
             ".text": 20608,
             ".data": 12,
             ".bss": 1841,
-            ".text-delta": 476,
+            ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -211,9 +178,9 @@
     {
         "summary": {
             "static_ram": 11924,
-            "static_ram_delta": 196,
+            "static_ram_delta": 0,
             "total_flash": 52265,
-            "total_flash_delta": 528
+            "total_flash_delta": 0
         }
     }
 ]

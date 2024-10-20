@@ -9,6 +9,7 @@
 // Blinking rate in milliseconds
 #define BLINKING_RATE     500ms
 
+#if !MBED_TEST_MDOE
 
 int main()
 {
@@ -24,3 +25,4 @@ int main()
         ThisThread::sleep_for(BLINKING_RATE);
     }
 }
+#endif
