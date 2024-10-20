@@ -9,7 +9,7 @@
 // Blinking rate in milliseconds
 #define BLINKING_RATE     500ms
 
-
+#if !MBED_TEST_MODE
 int main()
 {
     // Initialise the digital pin LED1 as an output
@@ -24,3 +24,4 @@ int main()
         ThisThread::sleep_for(BLINKING_RATE);
     }
 }
+#endif
