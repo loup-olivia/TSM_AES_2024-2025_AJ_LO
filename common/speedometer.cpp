@@ -79,8 +79,12 @@ float Speedometer::getDistance() {
 
 void Speedometer::reset() {
     // TODO 
-    _totalDistance = 0;
+
+    _totalDistanceMutex.lock();
+    _totalDistance = 0.0f;
     _currentSpeed = 0;
+    _totalDistanceMutex.unlock();
+    _lastTime = _timer.elapsed_time();
 
 }
 
