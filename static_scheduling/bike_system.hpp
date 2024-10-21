@@ -61,8 +61,8 @@ class BikeSystem {
    private:
     // private methods
     void init();
-    void gearTask();  
-    void speedDistanceTask(); 
+    void gearTask();
+    void speedDistanceTask();
     void temperatureTask();
     void resetTask();
     void displayTask1();
@@ -74,12 +74,12 @@ class BikeSystem {
     Timer _timer;
     // data member that represents the device for manipulating the gear
     GearDevice _gearDevice;
-    uint8_t _currentGear = bike_computer::kMinGear;
+    uint8_t _currentGear     = bike_computer::kMinGear;
     uint8_t _currentGearSize = bike_computer::kMinGearSize;
     // data member that represents the device for manipulating the pedal rotation
     // speed/time
     PedalDevice _pedalDevice;
-    float _currentSpeed = 0.0f;
+    float _currentSpeed     = 0.0f;
     float _traveledDistance = 0.0f;
     // data member that represents the device used for resetting
     ResetDevice _resetDevice;

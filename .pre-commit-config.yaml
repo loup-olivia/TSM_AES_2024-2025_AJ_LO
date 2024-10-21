@@ -1,4 +1,4 @@
-files: ^main.cpp
+files: ^main.cpp|^(common)|^(static_scheduling)|^(TESTS)
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.3.0
@@ -20,5 +20,5 @@ repos:
   -   id: cppcheck
       name: cppcheck
       require_serial: true
-      entry: cppcheck --enable=all --suppress=missingInclude:* --inline-suppr -i mbed-os --std=c++14 --error-exitcode=1
+      entry: cppcheck --enable=all --suppress=missingInclude:* --suppress=missingIncludeSystem:* --inline-suppr -i mbed-os --std=c++14 --error-exitcode=1
       language: system

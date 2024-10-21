@@ -69,9 +69,7 @@ void Speedometer::setGearSize(uint8_t gearSize) {
     }
 }
 
-float Speedometer::getCurrentSpeed() const { 
-    return _currentSpeed;
-}
+float Speedometer::getCurrentSpeed() const { return _currentSpeed; }
 
 float Speedometer::getDistance() {
     // make sure to update the distance traveled
@@ -80,7 +78,6 @@ float Speedometer::getDistance() {
 }
 
 void Speedometer::reset() {
-    // TODO 
 #if defined(MBED_TEST_MODE)
     if (_cb) {
         _cb();
@@ -88,10 +85,9 @@ void Speedometer::reset() {
 #endif  // defined(MBED_TEST_MODE)
     _totalDistanceMutex.lock();
     _totalDistance = 0.0f;
-    _currentSpeed = 0;
+    _currentSpeed  = 0;
     _totalDistanceMutex.unlock();
     _lastTime = _timer.elapsed_time();
-
 }
 
 #if defined(MBED_TEST_MODE)
@@ -107,7 +103,6 @@ std::chrono::milliseconds Speedometer::getCurrentPedalRotationTime() const {
 
 void Speedometer::setOnResetCallback(Callback<void()> callback) { _cb = callback; }
 
-
 #endif  // defined(MBED_TEST_MODE)
 
 void Speedometer::computeSpeed() {
@@ -118,14 +113,12 @@ void Speedometer::computeSpeed() {
     // = 6.99m If you ride at 80 pedal turns / min, you run a distance of 6.99 * 80 / min
     // ~= 560 m / min = 33.6 km/h
 
-    // TODO 
-    float gearRatio = static_cast<float>(kTraySize)/static_cast<float>(_gearSize);
+    float gearRatio   = static_cast<float>(kTraySize) / static_cast<float>(_gearSize);
     float distPerTurn = kWheelCircumference * gearRatio;
 
-    _currentSpeed = distPerTurn * 3600.0f/
-    std::chrono::duration_cast<std::chrono::milliseconds>(_pedalRotationTime).count();
-
-
+    _currentSpeed =
+        distPerTurn * 3600.0f /
+        std::chrono::duration_cast<std::chrono::milliseconds>(_pedalRotationTime).count();
 }
 
 void Speedometer::computeDistance() {
@@ -137,7 +130,6 @@ void Speedometer::computeDistance() {
     // ~= 560 m / min = 33.6 km/h. We then multiply the speed by the time for getting the
     // distance traveled.
 
-    // TODO
     std::chrono::microseconds currentTime = _timer.elapsed_time();
     auto elapsedTime =
         std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - _lastTime);
@@ -151,7 +143,6 @@ void Speedometer::computeDistance() {
 
     // update last time
     _lastTime = currentTime;
-
 }
 
 }  // namespace bike_computer

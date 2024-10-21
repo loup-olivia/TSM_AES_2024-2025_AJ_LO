@@ -24,8 +24,9 @@
 
 #pragma once
 
-#include <cstdint>
 #include <stdint.h>
+
+#include <cstdint>
 
 #include "mbed.h"
 #include "mbed_retarget.h"

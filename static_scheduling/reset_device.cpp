@@ -24,11 +24,13 @@
 
 #pragma once
 
-#include "PinNames.h"
-#include "mbed.h"
 #include "reset_device.hpp"
-#include "constants.hpp"
+
 #include <chrono>
+
+#include "PinNames.h"
+#include "constants.hpp"
+#include "mbed.h"
 
 #if defined(TARGET_DISCO_H747I)
 #define PUSH_BUTTON BUTTON1
@@ -43,18 +45,16 @@ namespace static_scheduling {
 
 static constexpr std::chrono::microseconds kTaskRunTime = 100000us;
 
-
-ResetDevice::ResetDevice(Timer& timer) : _resetButton(PUSH_BUTTON), _timer(timer){
+ResetDevice::ResetDevice(Timer& timer) : _resetButton(PUSH_BUTTON), _timer(timer) {
     _resetButton.rise(callback(this, &ResetDevice::onRise));
 }
 
-bool ResetDevice::checkReset(){
-
+bool ResetDevice::checkReset() {
     std::chrono::microseconds initialTime = _timer.elapsed_time();
     std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
 
-    while(elapsedTime < kTaskRunTime){
-        if(_resetButton.read() == kPolarityPressed){
+    while (elapsedTime < kTaskRunTime) {
+        if (_resetButton.read() == kPolarityPressed) {
             return true;
         }
         elapsedTime = _timer.elapsed_time() - initialTime;
@@ -62,12 +62,8 @@ bool ResetDevice::checkReset(){
     return false;
 }
 
-void ResetDevice::onRise(){
-    _pressTime = _timer.elapsed_time();
-}
+void ResetDevice::onRise() { _pressTime = _timer.elapsed_time(); }
 
-std::chrono::microseconds ResetDevice::getPressTime(){
-    return _pressTime;
-}
+std::chrono::microseconds ResetDevice::getPressTime() { return _pressTime; }
 
 }  // namespace static_scheduling

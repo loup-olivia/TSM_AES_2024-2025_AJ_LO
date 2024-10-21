@@ -24,10 +24,9 @@
 
 #include <chrono>
 
-#include "static_scheduling/bike_system.hpp"
-
 #include "greentea-client/test_env.h"
 #include "mbed.h"
+#include "static_scheduling/bike_system.hpp"
 #include "task_logger.hpp"
 #include "unity/unity.h"
 #include "utest/utest.h"

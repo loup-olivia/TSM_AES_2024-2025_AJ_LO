@@ -40,10 +40,10 @@ namespace static_scheduling {
 // definition of task execution time
 static constexpr std::chrono::microseconds kTaskRunTime = 200000us;
 
-PedalDevice::PedalDevice(Timer& timer) : _timer(timer){}
+PedalDevice::PedalDevice(Timer& timer) : _timer(timer) {}
 
-std::chrono::milliseconds PedalDevice::getCurrentRotationTime(){
-std::chrono::microseconds initialTime = _timer.elapsed_time();
+std::chrono::milliseconds PedalDevice::getCurrentRotationTime() {
+    std::chrono::microseconds initialTime = _timer.elapsed_time();
     std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
     // we bound the change to one increment/decrement per call
     bool hasChanged = false;
@@ -67,16 +67,15 @@ std::chrono::microseconds initialTime = _timer.elapsed_time();
         elapsedTime = _timer.elapsed_time() - initialTime;
     }
     return _pedalRotationTime;
-
 }
 
-void PedalDevice::increaseRotationSpeed(){
+void PedalDevice::increaseRotationSpeed() {
     if (_pedalRotationTime > bike_computer::kMinPedalRotationTime) {
         _pedalRotationTime -= bike_computer::kDeltaPedalRotationTime;
     }
 }
 
-void PedalDevice::decreaseRotationSpeed(){
+void PedalDevice::decreaseRotationSpeed() {
     if (_pedalRotationTime < bike_computer::kMaxPedalRotationTime) {
         _pedalRotationTime += bike_computer::kDeltaPedalRotationTime;
     }
