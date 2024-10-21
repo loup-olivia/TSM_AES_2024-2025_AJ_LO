@@ -1,0 +1,17 @@
+mbed-os/drivers/device_key/*
+mbed-os/drivers/source/usb/USBMSD.cpp
+mbed-os/drivers/source/SFDP.cpp
+mbed-os/connectivity/cellular/*
+mbed-os/connectivity/drivers/*
+mbed-os/connectivity/FEATURE_BLE/*
+mbed-os/connectivity/libraries/*
+mbed-os/connectivity/lorawan/*
+mbed-os/connectivity/lwipstack/*
+mbed-os/connectivity/nanostack/*
+mbed-os/connectivity/netsocket/*
+mbed-os/connectivity/nfc/*
+mbed-os/features/FEATURE_BOOTLOADER/*
+mbed-os/features/frameworks/mbed-client-cli/*
+mbed-os/features/frameworks/COMPONENT_FPGA_CI_TEST_SHIELD/*
+mbed-os/platform/randlib/*
+mbed-os/storage/kvstore/*
