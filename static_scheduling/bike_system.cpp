@@ -92,7 +92,9 @@ void BikeSystem::start() {
         tr_debug("Repeating cycle time is %" PRIu64 " milliseconds", cycle.count());
 
         // TODO: implement loop exit when applicable
-        if(_stopFlag == true){
+        bool exit = core_util_atomic_load_bool(&_stopFlag);
+        
+        if(exit == true){
             break;
         }
 
