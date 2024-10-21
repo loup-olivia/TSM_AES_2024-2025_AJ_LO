@@ -50,7 +50,7 @@ void Speedometer::setCurrentRotationTime(
 
         // change pedal rotation time
         _pedalRotationTime = currentRotationTime;
-
+        //comment
         // compute speed with the new pedal rotation time
         computeSpeed();
     }
