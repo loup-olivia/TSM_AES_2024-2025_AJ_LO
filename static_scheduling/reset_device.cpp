@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /****************************************************************************
- * @file reset_device.hpp
+ * @file reset_device.cpp
  * @author Serge Ayer <serge.ayer@hefr.ch>
  *
  * @brief ResetDevice header file (static scheduling)
@@ -25,32 +25,10 @@
 #pragma once
 
 #include "mbed.h"
+#include "reset_device.hpp"
 
 namespace static_scheduling {
 
-class ResetDevice {
-   public:
-    explicit ResetDevice(Timer& timer);  // NOLINT(runtime/references)
-
-    // make the class non copyable
-    ResetDevice(ResetDevice&)            = delete;
-    ResetDevice& operator=(ResetDevice&) = delete;
-
-    // method called for checking the reset status
-    bool checkReset();
-
-    // for computing the response time
-    std::chrono::microseconds getPressTime();
-
-   private:
-    // called when the button is pressed
-    void onRise();
-
-    // data members
-    // instance representing the reset button
-    InterruptIn _resetButton;
-    Timer& _timer;
-    std::chrono::microseconds _pressTime;
-};
+explicit ResetDevice::ResetDevice(Timer& timer) : _timer(timer){}
 
 }  // namespace static_scheduling
