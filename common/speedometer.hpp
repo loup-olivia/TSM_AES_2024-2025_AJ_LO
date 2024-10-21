@@ -54,7 +54,7 @@ class Speedometer {
     float getWheelCircumference() const;
     float getTraySize() const;
     std::chrono::milliseconds getCurrentPedalRotationTime() const;
-    void setOnResetCallback(mbed::Callback<void()> cb);
+    void setOnResetCallback(mbed::Callback<void()> callback);
 #endif  // defined(MBED_TEST_MODE)
 
    private:

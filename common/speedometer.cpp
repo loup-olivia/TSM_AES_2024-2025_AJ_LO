@@ -50,7 +50,7 @@ void Speedometer::setCurrentRotationTime(
 
         // change pedal rotation time
         _pedalRotationTime = currentRotationTime;
-        //comment
+
         // compute speed with the new pedal rotation time
         computeSpeed();
     }
@@ -69,7 +69,9 @@ void Speedometer::setGearSize(uint8_t gearSize) {
     }
 }
 
-float Speedometer::getCurrentSpeed() const { return _currentSpeed; }
+float Speedometer::getCurrentSpeed() const { 
+    return _currentSpeed;
+}
 
 float Speedometer::getDistance() {
     // make sure to update the distance traveled
@@ -79,7 +81,11 @@ float Speedometer::getDistance() {
 
 void Speedometer::reset() {
     // TODO 
-
+#if defined(MBED_TEST_MODE)
+    if (_cb) {
+        _cb();
+    }
+#endif  // defined(MBED_TEST_MODE)
     _totalDistanceMutex.lock();
     _totalDistance = 0.0f;
     _currentSpeed = 0;
@@ -98,6 +104,9 @@ float Speedometer::getTraySize() const { return kTraySize; }
 std::chrono::milliseconds Speedometer::getCurrentPedalRotationTime() const {
     return _pedalRotationTime;
 }
+
+void Speedometer::setOnResetCallback(Callback<void()> callback) { _cb = callback; }
+
 
 #endif  // defined(MBED_TEST_MODE)
 
