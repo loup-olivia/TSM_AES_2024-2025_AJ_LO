@@ -26,5 +26,5 @@ jobs:
         run: |
           set -e
           mbed deploy
-          mbed test -t GCC_ARM -m ${{ matrix.target }} --profile ${{ matrix.profile }} --compile -n tests-simple-test-always-succeed,tests-simple-test-ptr-test
+          mbed test -t GCC_ARM -m ${{ matrix.target }} --profile ${{ matrix.profile }} --compile -n tests-simple-test-always-succeed, tests-simple-test-ptr-test, advdembsof_library-tests-sensors-hdc1000, tests-bike-computer-sensor-device, tests-bike-computer-speedometer, tests-bike-computer-bike-system
           mbed compile -t GCC_ARM -m ${{ matrix.target }} --profile ${{ matrix.profile }}
