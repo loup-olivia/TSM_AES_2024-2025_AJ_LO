@@ -271,4 +271,23 @@ BUILD/DISCO_H747I/ARMC6/main.o: main.cpp \
   mbed-os/platform/include/platform/ScopedRamExecutionLock.h \
   mbed-os/platform/include/platform/mbed_stats.h \
   mbed-os/platform/include/platform/Stream.h \
-  mbed-os/platform/include/platform/FileLike.h common/constants.hpp
+  mbed-os/platform/include/platform/FileLike.h common/constants.hpp \
+  static_scheduling/bike_system.hpp \
+  advdembsof_library/display/display_device.hpp \
+  advdembsof_library/display/bike_display.hpp \
+  disco_h747i/Wrappers/lcd_display.hpp disco_h747i/Wrappers/fonts.hpp \
+  disco_h747i/Wrappers/return_code.hpp \
+  disco_h747i/Drivers/BSP/STM32H747I-DISCO/stm32h747i_discovery_lcd.h \
+  disco_h747i/Common/Inc/stm32h747i_discovery_conf.h \
+  disco_h747i/Drivers/BSP/STM32H747I-DISCO/stm32h747i_discovery_errno.h \
+  disco_h747i/Drivers/BSP/Components/Common/lcd.h \
+  disco_h747i/Drivers/BSP/STM32H747I-DISCO/../Components/otm8009a/otm8009a.h \
+  disco_h747i/Drivers/BSP/Components/otm8009a/otm8009a_reg.h \
+  mbed-os/cmsis/CMSIS_5/CMSIS/TARGET_CORTEX_M/Include/cmsis_compiler.h \
+  disco_h747i/Drivers/BSP/STM32H747I-DISCO/../Components/adv7533/adv7533.h \
+  disco_h747i/Drivers/BSP/Components/adv7533/adv7533_reg.h \
+  disco_h747i/Drivers/BSP/Components/otm8009a/otm8009a.h \
+  advdembsof_library/utils/task_logger.hpp common/sensor_device.hpp \
+  advdembsof_library/sensors/hdc1000.hpp common/speedometer.hpp \
+  static_scheduling/gear_device.hpp static_scheduling/pedal_device.hpp \
+  static_scheduling/reset_device.hpp
