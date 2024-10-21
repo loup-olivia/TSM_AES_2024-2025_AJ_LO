@@ -29,6 +29,8 @@ int main() {
     while (true) {
         led = !led;
         ThisThread::sleep_for(BLINKING_RATE);
+        // static_scheduling::BikeSystem bikeSystem;
+        // bikeSystem.start();
     }
 }
 #endif
