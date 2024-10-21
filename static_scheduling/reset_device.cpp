@@ -22,13 +22,31 @@
  * @version 1.0.0
  ***************************************************************************/
 
-#pragma once
+/*#pragma once
 
 #include "mbed.h"
 #include "reset_device.hpp"
+#include "constants.hpp"
+#include <chrono>
+
+#if MBED_CONF_MBED_TRACE_ENABLE
+#define TRACE_GROUP "ResetDevice"
+#endif  // MBED_CONF_MBED_TRACE_ENABLE
 
 namespace static_scheduling {
 
-explicit ResetDevice::ResetDevice(Timer& timer) : _timer(timer){}
+ResetDevice::ResetDevice(Timer& timer) : _timer(timer){}
 
-}  // namespace static_scheduling
+bool ResetDevice::checkReset(){
+
+}
+
+void ResetDevice::onRise(){
+
+}
+
+std::chrono::microseconds ResetDevice::getPressTime(){
+
+}
+
+}  // namespace static_scheduling*/
