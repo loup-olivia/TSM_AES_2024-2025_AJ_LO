@@ -28,5 +28,6 @@ to wait for 799ms until the input can be red again.
 
 2) It's also because of the task scheduler. If you happen to click in between two reset tasks, the input won't be red and nothing will happen.
 
+![Screenshot from 2024-10-22 01-32-50](https://github.com/user-attachments/assets/7969784a-385c-4cdf-b618-e00cea3fb4b3)
 
 
