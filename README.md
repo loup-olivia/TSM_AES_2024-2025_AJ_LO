@@ -1,4 +1,4 @@
-# ArmEmbSoft : Project 
+# AdvEmbSoft : Bike-computer 
 ## Student
 - Amez-Droz Jonathan
 - Loup Olivia
