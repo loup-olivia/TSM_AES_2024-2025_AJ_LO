@@ -22,7 +22,7 @@
  * @version 1.0.0
  ***************************************************************************/
 
-#include "speedometer.hpp"
+#include "common/speedometer.hpp"
 
 #include <chrono>
 #include <ratio>
@@ -60,8 +60,8 @@ void Speedometer::setGearSize(uint8_t gearSize) {
     if (_gearSize != gearSize) {
         // compute distance before chaning the gear size
         computeDistance();
-
-        // change gear size
+        // Comment
+        //  change gear size
         _gearSize = gearSize;
 
         // compute speed with the new gear size
