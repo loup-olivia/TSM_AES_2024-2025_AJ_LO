@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "bike_system.hpp"
-#include "constants.hpp"
-#include "mbed.h"
+#include "static_scheduling/bike_system.hpp"
+#include "common/constants.hpp"
+#include "mbed-os/mbed.h"
 #include "mbed_trace.h"
 
 // Blinking rate in milliseconds
@@ -27,7 +27,6 @@ int main() {
 #if defined(MBED_CONF_MBED_TRACE_ENABLE)
     mbed_trace_init();
 #endif
-
     while (true) {
         static_scheduling::BikeSystem bikeSystem;
         bikeSystem.start();
