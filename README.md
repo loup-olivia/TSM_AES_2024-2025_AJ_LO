@@ -30,4 +30,4 @@ to wait for 799ms until the input can be red again.
 
 ![Screenshot from 2024-10-22 01-32-50](https://github.com/user-attachments/assets/7969784a-385c-4cdf-b618-e00cea3fb4b3)
 
-
+# Part 2
