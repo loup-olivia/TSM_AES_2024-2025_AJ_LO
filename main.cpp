@@ -28,7 +28,8 @@ int main() {
 #endif
     while (true) {
         static_scheduling::BikeSystem bikeSystem;
-        bikeSystem.start();
+        // bikeSystem.start();
+        bikeSystem.startWithEventQueue();
     }
 }
 #endif

@@ -63,7 +63,9 @@ static void test_bike_system() {
         TEST_ASSERT_UINT64_WITHIN(
             deltaUs,
             taskPeriods[taskIndex].count(),
-            bikeSystem.getTaskLogger().getPeriod(taskIndex).count());
+            bikeSystem.getTaskLogger()
+                .getPeriod(taskIndex)
+                .count());  // getTaskLogger is only defined when in testmode
         TEST_ASSERT_UINT64_WITHIN(
             deltaUs,
             taskComputationTimes[taskIndex].count(),
@@ -86,7 +88,6 @@ static Specification specification(greentea_setup, cases);
 
 int main() { return !Harness::run(specification); }
 
-
 // test_bike_system_event_queue handler function
 static void test_bike_system_event_queue() {
     // create the BikeSystem instance
@@ -94,7 +95,8 @@ static void test_bike_system_event_queue() {
 
     // run the bike system in a separate thread
     Thread thread;
-    thread.start(callback(&bikeSystem, &static_scheduling::BikeSystem::startWithEventQueue));
+    thread.start(
+        callback(&bikeSystem, &static_scheduling::BikeSystem::startWithEventQueue));
 
     // let the bike system run for 20 secs
     ThisThread::sleep_for(20s);
@@ -116,6 +118,6 @@ static void test_bike_system_event_queue() {
         TEST_ASSERT_UINT64_WITHIN(
             deltaUs,
             taskPeriods[taskIndex].count(),
-            bikeSystem.getTaskLogger().getPeriod(taskIndex).count());        
+            bikeSystem.getTaskLogger().getPeriod(taskIndex).count());
     }
 }

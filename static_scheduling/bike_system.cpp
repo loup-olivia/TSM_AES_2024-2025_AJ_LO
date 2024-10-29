@@ -215,59 +215,56 @@ void BikeSystem::displayTask2() {
         _timer, advembsof::TaskLogger::kDisplayTask2Index, taskStartTime);
 }
 
-void BikeSystem::startWithEventQueue(){
-    EventQueue eventQueue; //create the event queue
+void BikeSystem::startWithEventQueue() {
+    tr_info("Starting Super-Loop with event queue");
 
-    //Schedule the gearEvent task
-    Event<void()> gearEvent(&eventQueue, callback(this, &BikeSystem::gearTask)); //Create the event with callback on the wanted function
-    gearEvent.delay(kGearTaskDelay); //define the delay between two calls of the task
-    gearEvent.period(kGearTaskPeriod); //define the period
-    gearEvent.post(); //schedule the task to the event queue
+    EventQueue eventQueue;  // create the event queue
 
-    //Schedule the speedDistance task
-    Event<void()> speedDistanceEvent(&eventQueue, callback(this, &BikeSystem::speedDistanceTask));
-    gearEvent.delay(kSpeedDistanceTaskDelay);
-    gearEvent.period(kSpeedDistanceTaskPeriod);
-    gearEvent.post();   
+    auto startTime = _timer.elapsed_time();
 
-    //Schedule the temperatureTask
-    Event<void()> temperatureTaskEvent(&eventQueue, callback(this, &BikeSystem::temperatureTask));
-    gearEvent.delay(kTemperatureTaskDelay);
-    gearEvent.period(kTemperatureTaskPeriod);
-    gearEvent.post();    
+    // Schedule the gearEvent task
+    Event<void()> gearEvent(
+        &eventQueue,
+        callback(this, &BikeSystem::gearTask));  // Create the event with callback on the
+                                                 // wanted function
+    gearEvent.delay(kGearTaskDelay);    // define the delay between two calls of the task
+    gearEvent.period(kGearTaskPeriod);  // define the period
+    gearEvent.post();                   // schedule the task to the event queue
+    // Schedule the speedDistance task
+    Event<void()> speedDistanceEvent(&eventQueue,
+                                     callback(this, &BikeSystem::speedDistanceTask));
+    speedDistanceEvent.delay(kSpeedDistanceTaskDelay);
+    speedDistanceEvent.period(kSpeedDistanceTaskPeriod);
+    speedDistanceEvent.post();
 
-    //Schedule the resetTask
+    // Schedule the temperatureTask
+    Event<void()> temperatureTaskEvent(&eventQueue,
+                                       callback(this, &BikeSystem::temperatureTask));
+    temperatureTaskEvent.delay(kTemperatureTaskDelay);
+    temperatureTaskEvent.period(kTemperatureTaskPeriod);
+    temperatureTaskEvent.post();
+
+    // Schedule the resetTask
     Event<void()> resetTaskEvent(&eventQueue, callback(this, &BikeSystem::resetTask));
-    gearEvent.delay(kResetTaskDelay);
-    gearEvent.period(kResetTaskPeriod);
-    gearEvent.post();   
+    resetTaskEvent.delay(kResetTaskDelay);
+    resetTaskEvent.period(kResetTaskPeriod);
+    resetTaskEvent.post();
 
-    //Schedule the displayTask1
-    Event<void()> displayTask1Event(&eventQueue, callback(this, &BikeSystem::displayTask1));
-    gearEvent.delay(kDisplayTask1Delay);
-    gearEvent.period(kDisplayTask1Period);
-    gearEvent.post();  
+    // Schedule the displayTask1
+    Event<void()> displayTask1Event(&eventQueue,
+                                    callback(this, &BikeSystem::displayTask1));
+    displayTask1Event.delay(kDisplayTask1Delay);
+    displayTask1Event.period(kDisplayTask1Period);
+    displayTask1Event.post();
 
-    //Schedule the displayTask2
-    Event<void()> displayTask2Event(&eventQueue, callback(this, &BikeSystem::displayTask2));
-    gearEvent.delay(kDisplayTask2Delay);
-    gearEvent.period(kDisplayTask2Period);
-    gearEvent.post();  
+    // Schedule the displayTask2
+    Event<void()> displayTask2Event(&eventQueue,
+                                    callback(this, &BikeSystem::displayTask2));
+    displayTask2Event.delay(kDisplayTask2Delay);
+    displayTask2Event.period(kDisplayTask2Period);
+    displayTask2Event.post();
+    tr_info("All tasks posted");
 
     eventQueue.dispatch_forever();
-
-    // register the time at the end of the cyclic schedule period and print the
-    // elapsed time for the period
-    std::chrono::microseconds endTime = _timer.elapsed_time();
-    const auto cycle =
-        std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-    tr_debug("Repeating cycle time is %" PRIu64 " milliseconds", cycle.count());
-
-    bool exit = core_util_atomic_load_bool(&_stopFlag);
-
-    if (exit == true) {
-        break;
-    }
-
 }
 }  // namespace static_scheduling

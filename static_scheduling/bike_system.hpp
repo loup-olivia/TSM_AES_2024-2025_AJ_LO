@@ -51,6 +51,9 @@ class BikeSystem {
     // method called in main() for starting the system
     void start();
 
+    // Method called in main() for scheduling event calls
+    void startWithEventQueue();
+
     // method called for stopping the system
     void stop();
 
@@ -67,8 +70,6 @@ class BikeSystem {
     void resetTask();
     void displayTask1();
     void displayTask2();
-    //Method for scheduling event calls
-    void startWithEventQueue();
 
     // stop flag, used for stopping the super-loop (set in stop())
     bool _stopFlag = false;
@@ -92,9 +93,6 @@ class BikeSystem {
     // data member that represents the sensor device
     bike_computer::SensorDevice _sensorDevice;
     float _currentTemperature = 0.0f;
-
-
-
     // used for logging task info
     advembsof::TaskLogger _taskLogger;
 };
