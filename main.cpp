@@ -5,10 +5,9 @@
 
 #include "common/constants.hpp"
 #include "mbed-os/mbed.h"
-#include "mbed_trace.h"
+#include "mbed-trace/mbed_trace.h"
 #include "static_scheduling/bike_system.hpp"
-
-// Blinking rate in milliseconds
+//  Blinking rate in milliseconds
 #define BLINKING_RATE 500ms
 
 #if defined(MBED_CONF_MBED_TRACE_ENABLE)
