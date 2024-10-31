@@ -93,6 +93,57 @@ void test_instance_sharing() {
     // Shared pointer has been destroyed
     TEST_ASSERT_EQUAL(0, Test::_instanceCount);
 }
+// unused function
+void test_raw_pointers() {
+    // Sanity-check value of counter
+    TEST_ASSERT_EQUAL(0, Test::_instanceCount);
+
+    // Create and destroy shared pointer in given scope
+    {
+        Test* raw_ptr = new Test;
+        TEST_ASSERT_EQUAL(1, Test::_instanceCount);
+        TEST_ASSERT_EQUAL(Test::kMagicNumber, raw_ptr->_value);
+        delete raw_ptr;
+    }
+
+    // Destroy shared pointer
+    TEST_ASSERT_EQUAL(0, Test::_instanceCount);
+}
+
+/**
+ * Test that multiple instances of unique pointers correctly manage the
+ * ownership of the the object
+ */
+void test_unique_ptr() {
+    std::unique_ptr<Test> unique_ptr1(nullptr);
+
+    // Sanity-check value of counter
+    TEST_ASSERT_EQUAL(0, Test::_instanceCount);
+
+    // Create and destroy shared pointer in given scope
+    {
+        std::unique_ptr<Test> unique_ptr2(new Test);
+        TEST_ASSERT_EQUAL(1, Test::_instanceCount);
+        // move ownership of unique_ptr2 to unique_ptr1
+        // unique_ptr1 = unique_ptr2; is not allowed
+        // must use the std::move() semantics
+        unique_ptr1 = std::move(unique_ptr2);
+        // still one instance only
+        TEST_ASSERT_EQUAL(1, Test::_instanceCount);
+        TEST_ASSERT_EQUAL(Test::kMagicNumber, unique_ptr1->_value);
+        // unique_ptr2 does not own ptr any more
+        TEST_ASSERT_EQUAL(nullptr, unique_ptr2.get());
+    }
+
+    // unique_ptr1 still owns an instance
+    TEST_ASSERT_EQUAL(1, Test::_instanceCount);
+
+    // release unique_ptr1
+    unique_ptr1 = nullptr;
+
+    // unique_ptr instance has been released
+    TEST_ASSERT_EQUAL(0, Test::_instanceCount);
+}
 
 static utest::v1::status_t greentea_setup(const size_t number_of_cases) {
     // Here, we specify the timeout (60s) and the host test (a built-in host test or the
