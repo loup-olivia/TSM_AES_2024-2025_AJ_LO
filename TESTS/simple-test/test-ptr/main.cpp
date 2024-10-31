@@ -115,34 +115,41 @@ void test_raw_pointers() {
  * ownership of the the object
  */
 void test_unique_ptr() {
-    std::unique_ptr<Test> unique_ptr1(nullptr);
-
-    // Sanity-check value of counter
+ // Initialize empty unique_ptr
+    std::unique_ptr<Test> master_ptr;
+    
+    // Verify initial state
     TEST_ASSERT_EQUAL(0, Test::_instanceCount);
+    TEST_ASSERT_EQUAL(nullptr, master_ptr.get());
 
-    // Create and destroy shared pointer in given scope
     {
-        std::unique_ptr<Test> unique_ptr2(new Test);
+        // Create new Test object owned by temporary_ptr
+        auto temporary_ptr = std::make_unique<Test>();
+        
+        // Verify object creation
         TEST_ASSERT_EQUAL(1, Test::_instanceCount);
-        // move ownership of unique_ptr2 to unique_ptr1
-        // unique_ptr1 = unique_ptr2; is not allowed
-        // must use the std::move() semantics
-        unique_ptr1 = std::move(unique_ptr2);
-        // still one instance only
+        TEST_ASSERT_EQUAL(Test::kMagicNumber, temporary_ptr->_value);
+        
+        // Transfer ownership to master_ptr
+        master_ptr = std::move(temporary_ptr);
+        
+        // Verify ownership transfer
         TEST_ASSERT_EQUAL(1, Test::_instanceCount);
-        TEST_ASSERT_EQUAL(Test::kMagicNumber, unique_ptr1->_value);
-        // unique_ptr2 does not own ptr any more
-        TEST_ASSERT_EQUAL(nullptr, unique_ptr2.get());
+        TEST_ASSERT_EQUAL(nullptr, temporary_ptr.get());
+        TEST_ASSERT_NOT_EQUAL(nullptr, master_ptr.get());
+        TEST_ASSERT_EQUAL(Test::kMagicNumber, master_ptr->_value);
     }
-
-    // unique_ptr1 still owns an instance
+    
+    // Verify object persists after scope exit
     TEST_ASSERT_EQUAL(1, Test::_instanceCount);
-
-    // release unique_ptr1
-    unique_ptr1 = nullptr;
-
-    // unique_ptr instance has been released
+    TEST_ASSERT_NOT_EQUAL(nullptr, master_ptr.get());
+    
+    // Reset master_ptr
+    master_ptr.reset();
+    
+    // Verify cleanup
     TEST_ASSERT_EQUAL(0, Test::_instanceCount);
+    TEST_ASSERT_EQUAL(nullptr, master_ptr.get());
 }
 
 static utest::v1::status_t greentea_setup(const size_t number_of_cases) {
@@ -155,7 +162,9 @@ static utest::v1::status_t greentea_setup(const size_t number_of_cases) {
 // List of test cases in this file
 static Case cases[] = {
     Case("Test single shared pointer instance", test_single_sharedptr_lifetime),
-    Case("Test instance sharing across multiple shared pointers", test_instance_sharing)};
+    Case("Test instance sharing across multiple shared pointers", test_instance_sharing),
+    Case("Test instance raw pointers", test_raw_pointers),
+    Case("Test instance unique pointers", test_unique_ptr)};
 
 static Specification specification(greentea_setup, cases);
 
