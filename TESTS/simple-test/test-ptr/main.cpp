@@ -115,9 +115,9 @@ void test_raw_pointers() {
  * ownership of the the object
  */
 void test_unique_ptr() {
- // Initialize empty unique_ptr
+    // Initialize empty unique_ptr
     std::unique_ptr<Test> master_ptr;
-    
+
     // Verify initial state
     TEST_ASSERT_EQUAL(0, Test::_instanceCount);
     TEST_ASSERT_EQUAL(nullptr, master_ptr.get());
@@ -125,28 +125,28 @@ void test_unique_ptr() {
     {
         // Create new Test object owned by temporary_ptr
         auto temporary_ptr = std::make_unique<Test>();
-        
+
         // Verify object creation
         TEST_ASSERT_EQUAL(1, Test::_instanceCount);
         TEST_ASSERT_EQUAL(Test::kMagicNumber, temporary_ptr->_value);
-        
+
         // Transfer ownership to master_ptr
         master_ptr = std::move(temporary_ptr);
-        
+
         // Verify ownership transfer
         TEST_ASSERT_EQUAL(1, Test::_instanceCount);
         TEST_ASSERT_EQUAL(nullptr, temporary_ptr.get());
         TEST_ASSERT_NOT_EQUAL(nullptr, master_ptr.get());
         TEST_ASSERT_EQUAL(Test::kMagicNumber, master_ptr->_value);
     }
-    
+
     // Verify object persists after scope exit
     TEST_ASSERT_EQUAL(1, Test::_instanceCount);
     TEST_ASSERT_NOT_EQUAL(nullptr, master_ptr.get());
-    
+
     // Reset master_ptr
     master_ptr.reset();
-    
+
     // Verify cleanup
     TEST_ASSERT_EQUAL(0, Test::_instanceCount);
     TEST_ASSERT_EQUAL(nullptr, master_ptr.get());
