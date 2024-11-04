@@ -57,7 +57,7 @@ BikeSystem::BikeSystem()
     : _timer(),
       _gearDevice(_timer),
       _pedalDevice(_timer),
-      _resetDevice(_timer),
+      _resetDevice(callback(this, &BikeSystem::onReset)),
       _speedometer(_timer),
       _displayDevice(),
       _taskLogger() {}
@@ -168,13 +168,19 @@ void BikeSystem::temperatureTask() {
         _timer, advembsof::TaskLogger::kTemperatureTaskIndex, taskStartTime);
 }
 
+void BikeSystem::onReset() {
+    _resetTime = _timer.elapsed_time();
+    core_util_atomic_store_bool(&_resetFlag, true);
+}
+
 void BikeSystem::resetTask() {
     auto taskStartTime = _timer.elapsed_time();
 
-    if (_resetDevice.checkReset()) {
-        std::chrono::microseconds responseTime =
-            _timer.elapsed_time() - _resetDevice.getPressTime();
-        tr_info("Reset task: response time is %" PRIu64 " usecs", responseTime.count());
+    if (core_util_atomic_load_bool(&_resetFlag)) {
+        tr_info("Reset task: response time is %" PRIu64 " usecs",
+                (_timer.elapsed_time() - _resetTime).count());
+
+        core_util_atomic_store_bool(&_resetFlag, false);
         _speedometer.reset();
     }
 

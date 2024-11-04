@@ -43,27 +43,9 @@ static constexpr uint8_t kPolarityPressed = 1;
 
 namespace static_scheduling_with_event {
 
-static constexpr std::chrono::microseconds kTaskRunTime = 100000us;
 
-ResetDevice::ResetDevice(Timer& timer) : _resetButton(PUSH_BUTTON), _timer(timer) {
-    _resetButton.rise(callback(this, &ResetDevice::onRise));
+ResetDevice::ResetDevice(mbed::Callback<void()> cb) : _resetButton(PUSH_BUTTON){
+    _resetButton.fall(cb);
 }
-
-bool ResetDevice::checkReset() {
-    std::chrono::microseconds initialTime = _timer.elapsed_time();
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-
-    while (elapsedTime < kTaskRunTime) {
-        if (_resetButton.read() == kPolarityPressed) {
-            return true;
-        }
-        elapsedTime = _timer.elapsed_time() - initialTime;
-    }
-    return false;
-}
-
-void ResetDevice::onRise() { _pressTime = _timer.elapsed_time(); }
-
-std::chrono::microseconds ResetDevice::getPressTime() { return _pressTime; }
 
 }  // namespace static_scheduling_with_event

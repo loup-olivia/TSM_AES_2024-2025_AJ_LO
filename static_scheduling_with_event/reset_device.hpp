@@ -30,27 +30,17 @@ namespace static_scheduling_with_event {
 
 class ResetDevice {
    public:
-    explicit ResetDevice(Timer& timer);  // NOLINT(runtime/references)
+    explicit ResetDevice(mbed::Callback<void()> cb);  //constructeur -- NOLINT(runtime/references)
 
     // make the class non copyable
     ResetDevice(ResetDevice&)            = delete;
     ResetDevice& operator=(ResetDevice&) = delete;
 
-    // method called for checking the reset status
-    bool checkReset();
-
-    // for computing the response time
-    std::chrono::microseconds getPressTime();
-
    private:
-    // called when the button is pressed
-    void onRise();
 
     // data members
     // instance representing the reset button
     InterruptIn _resetButton;
-    Timer& _timer;
-    std::chrono::microseconds _pressTime;
 };
 
 }  // namespace static_scheduling_with_event

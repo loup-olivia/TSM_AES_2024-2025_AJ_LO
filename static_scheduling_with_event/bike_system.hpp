@@ -25,6 +25,7 @@
 #pragma once
 
 // from advembsof
+#include "Timer.h"
 #include "display_device.hpp"
 #include "task_logger.hpp"
 
@@ -71,6 +72,8 @@ class BikeSystem {
     void displayTask1();
     void displayTask2();
 
+    void onReset();
+
     // stop flag, used for stopping the super-loop (set in stop())
     bool _stopFlag = false;
     // timer instance used for loggint task time and used by ResetDevice
@@ -95,6 +98,11 @@ class BikeSystem {
     float _currentTemperature = 0.0f;
     // used for logging task info
     advembsof::TaskLogger _taskLogger;
+
+    //used to register the occurence of the reset
+    std::chrono::microseconds _resetTime = std::chrono::microseconds::zero();
+    volatile bool _resetFlag = false;
+
 };
 
 }  // namespace static_scheduling_with_event
