@@ -218,6 +218,8 @@ void BikeSystem::displayTask2() {
 void BikeSystem::startWithEventQueue() {
     tr_info("Starting Super-Loop with event queue");
 
+    init();
+
     EventQueue eventQueue;  // create the event queue
 
     auto startTime = _timer.elapsed_time();
