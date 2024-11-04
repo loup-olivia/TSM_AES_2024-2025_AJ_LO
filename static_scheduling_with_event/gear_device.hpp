@@ -31,7 +31,7 @@ namespace static_scheduling_with_event {
 
 class GearDevice {
    public:
-    explicit GearDevice(Timer& timer);  // NOLINT(runtime/references)
+    GearDevice();  // NOLINT(runtime/references)
 
     // make the class non copyable
     GearDevice(GearDevice&)            = delete;
@@ -42,9 +42,11 @@ class GearDevice {
     uint8_t getCurrentGearSize() const;
 
    private:
+    void onJoystickUp();
+    void onJoystickDown();
+
     // data members
     uint8_t _currentGear = bike_computer::kMinGear;
-    Timer& _timer;
 };
 
 }  // namespace static_scheduling_with_event
