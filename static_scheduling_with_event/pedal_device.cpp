@@ -40,45 +40,34 @@ namespace static_scheduling_with_event {
 // definition of task execution time
 static constexpr std::chrono::microseconds kTaskRunTime = 200000us;
 
-PedalDevice::PedalDevice(Timer& timer) : _timer(timer) {}
+PedalDevice::PedalDevice() {
+        // register the joystick event handler
+    disco::Joystick::getInstance().setLeftCallback(
+        mbed::callback(this, &PedalDevice::onJoystickLeft));
+    disco::Joystick::getInstance().setRightCallback(
+        mbed::callback(this, &PedalDevice::onJoystickRight));    
+}
 
 std::chrono::milliseconds PedalDevice::getCurrentRotationTime() {
-    std::chrono::microseconds initialTime = _timer.elapsed_time();
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    // we bound the change to one increment/decrement per call
-    bool hasChanged = false;
-    while (elapsedTime < kTaskRunTime) {
-        if (!hasChanged) {
-            disco::Joystick::State joystickState =
-                disco::Joystick::getInstance().getState();
-            switch (joystickState) {
-                case disco::Joystick::State::LeftPressed:
-                    decreaseRotationSpeed();
-                    hasChanged = true;
-                    break;
-                case disco::Joystick::State::RightPressed:
-                    increaseRotationSpeed();
-                    hasChanged = true;
-                    break;
-                default:
-                    break;
-            }
-        }
-        elapsedTime = _timer.elapsed_time() - initialTime;
-    }
-    return _pedalRotationTime;
+    return bike_computer::kMinPedalRotationTime +
+           core_util_atomic_load_u32(&_currentStep) *
+               bike_computer::kDeltaPedalRotationTime;
 }
 
 void PedalDevice::increaseRotationSpeed() {
-    if (_pedalRotationTime > bike_computer::kMinPedalRotationTime) {
-        _pedalRotationTime -= bike_computer::kDeltaPedalRotationTime;
+    if (core_util_atomic_load_u32(&_currentStep) > 0) {
+        core_util_atomic_decr_u32(&_currentStep, 1);
     }
 }
 
 void PedalDevice::decreaseRotationSpeed() {
-    if (_pedalRotationTime < bike_computer::kMaxPedalRotationTime) {
-        _pedalRotationTime += bike_computer::kDeltaPedalRotationTime;
+    if (core_util_atomic_load_u32(&_currentStep) < kNbSteps) {
+        core_util_atomic_incr_u32(&_currentStep, 1);
     }
 }
+
+void PedalDevice::onJoystickLeft() { decreaseRotationSpeed(); }
+
+void PedalDevice::onJoystickRight() { increaseRotationSpeed(); }
 
 }  // namespace static_scheduling_with_event

@@ -52,9 +52,6 @@ class BikeSystem {
     // method called in main() for starting the system
     void start();
 
-    // Method called in main() for scheduling event calls
-    void startWithEventQueue();
-
     // method called for stopping the system
     void stop();
 

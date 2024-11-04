@@ -55,47 +55,66 @@ static constexpr std::chrono::milliseconds kDisplayTask2ComputationTime      = 1
 
 BikeSystem::BikeSystem()
     : _timer(),
-      _gearDevice(_timer),
-      _pedalDevice(_timer),
+      _gearDevice(),
+      _pedalDevice(),
       _resetDevice(callback(this, &BikeSystem::onReset)),
       _speedometer(_timer),
       _displayDevice(),
       _taskLogger() {}
 
 void BikeSystem::start() {
-    tr_info("Starting Super-Loop without event handling");
+        tr_info("Starting Super-Loop with event queue");
 
     init();
 
-    while (true) {
-        auto startTime = _timer.elapsed_time();
+    EventQueue eventQueue;  // create the event queue
 
-        // Calls according to log on the codelab
-        gearTask();
-        speedDistanceTask();
-        displayTask1();
-        speedDistanceTask();
-        resetTask();
-        gearTask();
-        speedDistanceTask();
-        temperatureTask();
-        displayTask2();
-        speedDistanceTask();
-        resetTask();
+    auto startTime = _timer.elapsed_time();
 
-        // register the time at the end of the cyclic schedule period and print the
-        // elapsed time for the period
-        std::chrono::microseconds endTime = _timer.elapsed_time();
-        const auto cycle =
-            std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-        tr_debug("Repeating cycle time is %" PRIu64 " milliseconds", cycle.count());
+    // Schedule the gearEvent task
+    Event<void()> gearEvent(
+        &eventQueue,
+        callback(this, &BikeSystem::gearTask));  // Create the event with callback on the
+                                                 // wanted function
+    gearEvent.delay(kGearTaskDelay);    // define the delay between two calls of the task
+    gearEvent.period(kGearTaskPeriod);  // define the period
+    gearEvent.post();                   // schedule the task to the event queue
+    // Schedule the speedDistance task
+    Event<void()> speedDistanceEvent(&eventQueue,
+                                     callback(this, &BikeSystem::speedDistanceTask));
+    speedDistanceEvent.delay(kSpeedDistanceTaskDelay);
+    speedDistanceEvent.period(kSpeedDistanceTaskPeriod);
+    speedDistanceEvent.post();
 
-        bool exit = core_util_atomic_load_bool(&_stopFlag);
+    // Schedule the temperatureTask
+    Event<void()> temperatureTaskEvent(&eventQueue,
+                                       callback(this, &BikeSystem::temperatureTask));
+    temperatureTaskEvent.delay(kTemperatureTaskDelay);
+    temperatureTaskEvent.period(kTemperatureTaskPeriod);
+    temperatureTaskEvent.post();
 
-        if (exit == true) {
-            break;
-        }
-    }
+    // Schedule the resetTask
+    Event<void()> resetTaskEvent(&eventQueue, callback(this, &BikeSystem::resetTask));
+    resetTaskEvent.delay(kResetTaskDelay);
+    resetTaskEvent.period(kResetTaskPeriod);
+    resetTaskEvent.post();
+
+    // Schedule the displayTask1
+    Event<void()> displayTask1Event(&eventQueue,
+                                    callback(this, &BikeSystem::displayTask1));
+    displayTask1Event.delay(kDisplayTask1Delay);
+    displayTask1Event.period(kDisplayTask1Period);
+    displayTask1Event.post();
+
+    // Schedule the displayTask2
+    Event<void()> displayTask2Event(&eventQueue,
+                                    callback(this, &BikeSystem::displayTask2));
+    displayTask2Event.delay(kDisplayTask2Delay);
+    displayTask2Event.period(kDisplayTask2Period);
+    displayTask2Event.post();
+    tr_info("All tasks posted");
+
+    eventQueue.dispatch_forever();
 }
 
 void BikeSystem::stop() { core_util_atomic_store_bool(&_stopFlag, true); }
@@ -221,58 +240,4 @@ void BikeSystem::displayTask2() {
         _timer, advembsof::TaskLogger::kDisplayTask2Index, taskStartTime);
 }
 
-void BikeSystem::startWithEventQueue() {
-    tr_info("Starting Super-Loop with event queue");
-
-    init();
-
-    EventQueue eventQueue;  // create the event queue
-
-    auto startTime = _timer.elapsed_time();
-
-    // Schedule the gearEvent task
-    Event<void()> gearEvent(
-        &eventQueue,
-        callback(this, &BikeSystem::gearTask));  // Create the event with callback on the
-                                                 // wanted function
-    gearEvent.delay(kGearTaskDelay);    // define the delay between two calls of the task
-    gearEvent.period(kGearTaskPeriod);  // define the period
-    gearEvent.post();                   // schedule the task to the event queue
-    // Schedule the speedDistance task
-    Event<void()> speedDistanceEvent(&eventQueue,
-                                     callback(this, &BikeSystem::speedDistanceTask));
-    speedDistanceEvent.delay(kSpeedDistanceTaskDelay);
-    speedDistanceEvent.period(kSpeedDistanceTaskPeriod);
-    speedDistanceEvent.post();
-
-    // Schedule the temperatureTask
-    Event<void()> temperatureTaskEvent(&eventQueue,
-                                       callback(this, &BikeSystem::temperatureTask));
-    temperatureTaskEvent.delay(kTemperatureTaskDelay);
-    temperatureTaskEvent.period(kTemperatureTaskPeriod);
-    temperatureTaskEvent.post();
-
-    // Schedule the resetTask
-    Event<void()> resetTaskEvent(&eventQueue, callback(this, &BikeSystem::resetTask));
-    resetTaskEvent.delay(kResetTaskDelay);
-    resetTaskEvent.period(kResetTaskPeriod);
-    resetTaskEvent.post();
-
-    // Schedule the displayTask1
-    Event<void()> displayTask1Event(&eventQueue,
-                                    callback(this, &BikeSystem::displayTask1));
-    displayTask1Event.delay(kDisplayTask1Delay);
-    displayTask1Event.period(kDisplayTask1Period);
-    displayTask1Event.post();
-
-    // Schedule the displayTask2
-    Event<void()> displayTask2Event(&eventQueue,
-                                    callback(this, &BikeSystem::displayTask2));
-    displayTask2Event.delay(kDisplayTask2Delay);
-    displayTask2Event.period(kDisplayTask2Period);
-    displayTask2Event.post();
-    tr_info("All tasks posted");
-
-    eventQueue.dispatch_forever();
-}
 }  // namespace static_scheduling_with_event

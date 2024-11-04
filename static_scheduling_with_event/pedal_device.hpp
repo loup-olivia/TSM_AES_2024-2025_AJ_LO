@@ -31,7 +31,7 @@ namespace static_scheduling_with_event {
 
 class PedalDevice {
    public:
-    explicit PedalDevice(Timer& timer);  // NOLINT(runtime/references)
+    PedalDevice();  // NOLINT(runtime/references)
 
     // make the class non copyable
     PedalDevice(PedalDevice&)            = delete;
@@ -41,14 +41,20 @@ class PedalDevice {
     std::chrono::milliseconds getCurrentRotationTime();
 
    private:
+    void onJoystickLeft();
+    void onJoystickRight();
     // private methods
     void increaseRotationSpeed();
     void decreaseRotationSpeed();
 
-    // data members
-    std::chrono::milliseconds _pedalRotationTime =
-        bike_computer::kInitialPedalRotationTime;
-    Timer& _timer;
+    volatile uint32_t _currentStep = static_cast<uint32_t>(
+        (bike_computer::kInitialPedalRotationTime - bike_computer::kMinPedalRotationTime)
+            .count() /
+        bike_computer::kDeltaPedalRotationTime.count());
+    volatile uint32_t kNbSteps = static_cast<uint32_t>(
+        (bike_computer::kMaxPedalRotationTime - bike_computer::kMinPedalRotationTime)
+            .count() /
+        bike_computer::kDeltaPedalRotationTime.count());
 };
 
 }  // namespace static_scheduling_with_event
