@@ -96,10 +96,9 @@ class BikeSystem {
     // used for logging task info
     advembsof::TaskLogger _taskLogger;
 
-    //used to register the occurence of the reset
+    // used to register the occurence of the reset
     std::chrono::microseconds _resetTime = std::chrono::microseconds::zero();
-    volatile bool _resetFlag = false;
-
+    volatile bool _resetFlag             = false;
 };
 
 }  // namespace static_scheduling_with_event

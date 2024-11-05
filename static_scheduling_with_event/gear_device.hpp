@@ -31,7 +31,7 @@ namespace static_scheduling_with_event {
 
 class GearDevice {
    public:
-   explicit GearDevice();  // NOLINT(runtime/references)
+    GearDevice();  // NOLINT(runtime/references)
 
     // make the class non copyable
     GearDevice(GearDevice&)            = delete;

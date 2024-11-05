@@ -27,7 +27,6 @@
 // from disco_h747i/wrappers
 #include <chrono>
 
-#include "Timer.h"
 #include "joystick.hpp"
 #include "mbed_trace.h"
 
@@ -37,15 +36,12 @@
 
 namespace static_scheduling_with_event {
 
-// definition of task execution time
-static constexpr std::chrono::microseconds kTaskRunTime = 200000us;
-
 PedalDevice::PedalDevice() {
-        // register the joystick event handler
+    // register the joystick event handler
     disco::Joystick::getInstance().setLeftCallback(
         mbed::callback(this, &PedalDevice::onJoystickLeft));
     disco::Joystick::getInstance().setRightCallback(
-        mbed::callback(this, &PedalDevice::onJoystickRight));    
+        mbed::callback(this, &PedalDevice::onJoystickRight));
 }
 
 std::chrono::milliseconds PedalDevice::getCurrentRotationTime() {

@@ -63,7 +63,7 @@ BikeSystem::BikeSystem()
       _taskLogger() {}
 
 void BikeSystem::start() {
-        tr_info("Starting Super-Loop with event queue");
+    tr_info("Starting Super-Loop with event handling");
 
     init();
 
@@ -176,13 +176,6 @@ void BikeSystem::temperatureTask() {
     // no need to protect access to data members (single threaded)
     _currentTemperature = _sensorDevice.readTemperature();
 
-    // simulate task computation by waiting for the required task computation time
-
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    while (elapsedTime < kTemperatureTaskComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
-
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kTemperatureTaskIndex, taskStartTime);
 }
@@ -214,13 +207,6 @@ void BikeSystem::displayTask1() {
     _displayDevice.displaySpeed(_currentSpeed);
     _displayDevice.displayDistance(_traveledDistance);
 
-    // simulate task computation by waiting for the required task computation time
-
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    while (elapsedTime < kDisplayTask1ComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
-
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
 }
@@ -232,10 +218,6 @@ void BikeSystem::displayTask2() {
 
     // simulate task computation by waiting for the required task computation time
 
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    while (elapsedTime < kDisplayTask2ComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask2Index, taskStartTime);
 }

@@ -30,14 +30,14 @@ namespace static_scheduling_with_event {
 
 class ResetDevice {
    public:
-    explicit ResetDevice(mbed::Callback<void()> cb);  //constructeur -- NOLINT(runtime/references)
+    explicit ResetDevice(
+        mbed::Callback<void()> cb);  // constructeur -- NOLINT(runtime/references)
 
     // make the class non copyable
     ResetDevice(ResetDevice&)            = delete;
     ResetDevice& operator=(ResetDevice&) = delete;
 
    private:
-
     // data members
     // instance representing the reset button
     InterruptIn _resetButton;

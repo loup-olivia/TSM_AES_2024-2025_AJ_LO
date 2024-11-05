@@ -43,8 +43,7 @@ static constexpr uint8_t kPolarityPressed = 1;
 
 namespace static_scheduling_with_event {
 
-
-ResetDevice::ResetDevice(mbed::Callback<void()> cb) : _resetButton(PUSH_BUTTON){
+ResetDevice::ResetDevice(mbed::Callback<void()> cb) : _resetButton(PUSH_BUTTON) {
     _resetButton.fall(cb);
 }
 

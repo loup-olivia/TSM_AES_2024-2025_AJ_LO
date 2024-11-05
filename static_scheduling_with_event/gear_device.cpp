@@ -36,16 +36,12 @@
 
 namespace static_scheduling_with_event {
 
-// definition of task execution time
-static constexpr std::chrono::microseconds kTaskRunTime = 100000us;
-
 GearDevice::GearDevice() {
-        // register the joystick event handler
+    // register the joystick event handler
     disco::Joystick::getInstance().setUpCallback(
         mbed::callback(this, &GearDevice::onJoystickUp));
     disco::Joystick::getInstance().setDownCallback(
         mbed::callback(this, &GearDevice::onJoystickDown));
-    
 }
 
 void GearDevice::onJoystickUp() {
