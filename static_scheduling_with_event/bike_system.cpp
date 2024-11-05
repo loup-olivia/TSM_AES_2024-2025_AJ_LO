@@ -32,7 +32,7 @@
 #define TRACE_GROUP "BikeSystem"
 #endif  // MBED_CONF_MBED_TRACE_ENABLE
 
-namespace static_scheduling {
+namespace static_scheduling_with_event {
 
 static constexpr std::chrono::milliseconds kGearTaskPeriod                   = 800ms;
 static constexpr std::chrono::milliseconds kGearTaskDelay                    = 0ms;
@@ -55,51 +55,15 @@ static constexpr std::chrono::milliseconds kDisplayTask2ComputationTime      = 1
 
 BikeSystem::BikeSystem()
     : _timer(),
-      _gearDevice(_timer),
-      _pedalDevice(_timer),
-      _resetDevice(_timer),
+      _gearDevice(),
+      _pedalDevice(),
+      _resetDevice(callback(this, &BikeSystem::onReset)),
       _speedometer(_timer),
       _displayDevice(),
       _taskLogger() {}
 
 void BikeSystem::start() {
-    tr_info("Starting Super-Loop without event handling");
-
-    init();
-
-    while (true) {
-        auto startTime = _timer.elapsed_time();
-
-        // Calls according to log on the codelab
-        gearTask();
-        speedDistanceTask();
-        displayTask1();
-        speedDistanceTask();
-        resetTask();
-        gearTask();
-        speedDistanceTask();
-        temperatureTask();
-        displayTask2();
-        speedDistanceTask();
-        resetTask();
-
-        // register the time at the end of the cyclic schedule period and print the
-        // elapsed time for the period
-        std::chrono::microseconds endTime = _timer.elapsed_time();
-        const auto cycle =
-            std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-        tr_debug("Repeating cycle time is %" PRIu64 " milliseconds", cycle.count());
-
-        bool exit = core_util_atomic_load_bool(&_stopFlag);
-
-        if (exit == true) {
-            break;
-        }
-    }
-}
-
-void BikeSystem::startWithEventQueue() {
-    tr_info("Starting Super-Loop with event queue");
+    tr_info("Starting Super-Loop with event handling");
 
     init();
 
@@ -212,24 +176,23 @@ void BikeSystem::temperatureTask() {
     // no need to protect access to data members (single threaded)
     _currentTemperature = _sensorDevice.readTemperature();
 
-    // simulate task computation by waiting for the required task computation time
-
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    while (elapsedTime < kTemperatureTaskComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
-
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kTemperatureTaskIndex, taskStartTime);
+}
+
+void BikeSystem::onReset() {
+    _resetTime = _timer.elapsed_time();
+    core_util_atomic_store_bool(&_resetFlag, true);
 }
 
 void BikeSystem::resetTask() {
     auto taskStartTime = _timer.elapsed_time();
 
-    if (_resetDevice.checkReset()) {
-        std::chrono::microseconds responseTime =
-            _timer.elapsed_time() - _resetDevice.getPressTime();
-        tr_info("Reset task: response time is %" PRIu64 " usecs", responseTime.count());
+    if (core_util_atomic_load_bool(&_resetFlag)) {
+        tr_info("Reset task: response time is %" PRIu64 " usecs",
+                (_timer.elapsed_time() - _resetTime).count());
+
+        core_util_atomic_store_bool(&_resetFlag, false);
         _speedometer.reset();
     }
 
@@ -244,13 +207,6 @@ void BikeSystem::displayTask1() {
     _displayDevice.displaySpeed(_currentSpeed);
     _displayDevice.displayDistance(_traveledDistance);
 
-    // simulate task computation by waiting for the required task computation time
-
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    while (elapsedTime < kDisplayTask1ComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
-
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
 }
@@ -262,12 +218,8 @@ void BikeSystem::displayTask2() {
 
     // simulate task computation by waiting for the required task computation time
 
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    while (elapsedTime < kDisplayTask2ComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask2Index, taskStartTime);
 }
 
-}  // namespace static_scheduling
+}  // namespace static_scheduling_with_event
