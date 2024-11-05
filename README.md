@@ -32,3 +32,21 @@ to wait for 799ms until the input can be red again.
 
 # Part 2
 Test for part 2 mbed test -m DISCO_H747I -t GCC_ARM -n tests-bike-computer-bike-system --compile --run -v
+
+### Question  1 
+**If you print CPU statistics at the end of every major cycle (in the super-loop), what CPU usage do you observe? How can you explain the observed CPU uptime? : 
+
+### Question 2
+**If you run the program after the change from busy wait to sleep calls, what CPU usage do you observe? How can you explain the observed CPU uptime?
+
+### Question 3
+**If you run the static_scheduling_with_event program, what CPU usage do you observe? How can you explain the observed CPU uptime?
+
+### Question 4
+**If you run the static_scheduling_with_event program, what CPU usage do you observe? How can you explain the observed CPU uptime?
+
+## Question 5
+**When you run multiple tests for computing the response time of the reset event, what do you observe? Is there an improvement as compared to the static_scheduling::BikeSystem implementation?
+
+If you do not press long enough on the push button, the event may be missed and no reset happens.
+Based on the program itself and on the task scheduling, explain these two behaviors. Explain also why such behaviors may be problematic.
