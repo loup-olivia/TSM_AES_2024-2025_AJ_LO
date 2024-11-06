@@ -34,8 +34,8 @@ int main() {
     while (true) {
         static_scheduling::BikeSystem bikeSystem;
         bikeSystem.start();
-        // advembsof::CPULogger _cpuLogger(timer);
-        // _cpuLogger.printStats();
+        advembsof::CPULogger _cpuLogger(timer);
+        _cpuLogger.printStats();
     }
 }
 #endif
