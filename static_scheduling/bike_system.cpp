@@ -28,6 +28,7 @@
 
 #include "gear_device.hpp"
 #include "mbed_trace.h"
+#include "rtos.h"
 #if MBED_CONF_MBED_TRACE_ENABLE
 #define TRACE_GROUP "BikeSystem"
 #endif  // MBED_CONF_MBED_TRACE_ENABLE
@@ -97,10 +98,13 @@ void BikeSystem::start() {
         }
     }
 }
+// function would be use later
 
+// cppcheck-suppress [unusedFunction, unmatchedSuppression]
 void BikeSystem::stop() { core_util_atomic_store_bool(&_stopFlag, true); }
 
 #if defined(MBED_TEST_MODE)
+// cppcheck-suppress [unusedFunction, unmatchedSuppression]
 const advembsof::TaskLogger& BikeSystem::getTaskLogger() { return _taskLogger; }
 #endif  // defined(MBED_TEST_MODE)
 
@@ -159,10 +163,12 @@ void BikeSystem::temperatureTask() {
 
     // simulate task computation by waiting for the required task computation time
 
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    while (elapsedTime < kTemperatureTaskComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
+    // std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
+    // while (elapsedTime < kTemperatureTaskComputationTime) {
+    //     elapsedTime = _timer.elapsed_time() - taskStartTime;
+    // }
+    std::chrono::milliseconds elapsedTime = std::chrono::milliseconds::zero();
+    ThisThread::sleep_for(kDisplayTask2ComputationTime - elapsedTime);
 
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kTemperatureTaskIndex, taskStartTime);
@@ -191,10 +197,12 @@ void BikeSystem::displayTask1() {
 
     // simulate task computation by waiting for the required task computation time
 
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    while (elapsedTime < kDisplayTask1ComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
+    // std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
+    // while (elapsedTime < kDisplayTask1ComputationTime) {
+    //     elapsedTime = _timer.elapsed_time() - taskStartTime;
+    // }
+    std::chrono::milliseconds elapsedTime = std::chrono::milliseconds::zero();
+    ThisThread::sleep_for(kDisplayTask2ComputationTime - elapsedTime);
 
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
@@ -207,10 +215,14 @@ void BikeSystem::displayTask2() {
 
     // simulate task computation by waiting for the required task computation time
 
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    while (elapsedTime < kDisplayTask2ComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
+    // std::chrono::microseconds elapsedTime =
+    // std::chrono::microseconds::zero();
+    // while (elapsedTime < kDisplayTask2ComputationTime) {
+    //     elapsedTime = _timer.elapsed_time() - taskStartTime;
+    // }
+    std::chrono::milliseconds elapsedTime = std::chrono::milliseconds::zero();
+    ThisThread::sleep_for(kDisplayTask2ComputationTime - elapsedTime);
+
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask2Index, taskStartTime);
 }
