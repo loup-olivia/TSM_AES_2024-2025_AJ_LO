@@ -26,10 +26,10 @@
 
 #include <chrono>
 
+#include "advdembsof_library/utils/cpu_logger.hpp"
 #include "gear_device.hpp"
 #include "mbed_trace.h"
 #include "rtos.h"
-#include "advdembsof_library/utils/cpu_logger.hpp"
 
 #if MBED_CONF_MBED_TRACE_ENABLE
 #define TRACE_GROUP "BikeSystem"
@@ -69,7 +69,7 @@ BikeSystem::BikeSystem()
 
 void BikeSystem::start() {
     tr_info("Starting Super-Loop without event handling");
-    
+
     init();
 
     while (true) {
@@ -97,7 +97,6 @@ void BikeSystem::start() {
         bool exit = core_util_atomic_load_bool(&_stopFlag);
 
         _cpuLogger.printStats();
-
 
         if (exit == true) {
             break;
@@ -224,13 +223,18 @@ void BikeSystem::temperatureTask() {
 
     // simulate task computation by waiting for the required task computation time
 
-    // std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    // while (elapsedTime < kTemperatureTaskComputationTime) {
-    //     elapsedTime = _timer.elapsed_time() - taskStartTime;
-    // }
-    std::chrono::milliseconds elapsedTime = std::chrono::milliseconds::zero();
-    ThisThread::sleep_for(kDisplayTask2ComputationTime - elapsedTime);
+    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
+    while (elapsedTime < kTemperatureTaskComputationTime) {
+        elapsedTime = _timer.elapsed_time() - taskStartTime;
+    }
 
+/*
+    std::chrono::milliseconds elapsedTime =
+        std::chrono::duration_cast<std::chrono::milliseconds>(_timer.elapsed_time() -
+                                                              taskStartTime);
+
+    ThisThread::sleep_for(kTemperatureTaskComputationTime - elapsedTime);
+*/
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kTemperatureTaskIndex, taskStartTime);
 }
@@ -258,13 +262,17 @@ void BikeSystem::displayTask1() {
 
     // simulate task computation by waiting for the required task computation time
 
-    // std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    // while (elapsedTime < kDisplayTask1ComputationTime) {
-    //     elapsedTime = _timer.elapsed_time() - taskStartTime;
-    // }
-    std::chrono::milliseconds elapsedTime = std::chrono::milliseconds::zero();
-    ThisThread::sleep_for(kDisplayTask2ComputationTime - elapsedTime);
+    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
+    while (elapsedTime < kDisplayTask1ComputationTime) {
+        elapsedTime = _timer.elapsed_time() - taskStartTime;
+    }
 
+    /*std::chrono::milliseconds elapsedTime =
+        std::chrono::duration_cast<std::chrono::milliseconds>(_timer.elapsed_time() -
+                                                              taskStartTime);
+
+    ThisThread::sleep_for(kDisplayTask1ComputationTime - elapsedTime);
+*/
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
 }
@@ -276,14 +284,18 @@ void BikeSystem::displayTask2() {
 
     // simulate task computation by waiting for the required task computation time
 
-    // std::chrono::microseconds elapsedTime =
-    // std::chrono::microseconds::zero();
-    // while (elapsedTime < kDisplayTask2ComputationTime) {
-    //     elapsedTime = _timer.elapsed_time() - taskStartTime;
-    // }
-    std::chrono::milliseconds elapsedTime = std::chrono::milliseconds::zero();
-    ThisThread::sleep_for(kDisplayTask2ComputationTime - elapsedTime);
+    std::chrono::microseconds elapsedTime =
+    std::chrono::microseconds::zero();
+    while (elapsedTime < kDisplayTask2ComputationTime) {
+        elapsedTime = _timer.elapsed_time() - taskStartTime;
+    }
+/*
+    std::chrono::milliseconds elapsedTime =
+        std::chrono::duration_cast<std::chrono::milliseconds>(_timer.elapsed_time() -
+                                                              taskStartTime);
 
+    ThisThread::sleep_for(kDisplayTask2ComputationTime - elapsedTime);
+*/
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask2Index, taskStartTime);
 }

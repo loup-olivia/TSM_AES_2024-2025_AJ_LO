@@ -25,9 +25,9 @@
 #pragma once
 
 // from advembsof
+#include "cpu_logger.hpp"
 #include "display_device.hpp"
 #include "task_logger.hpp"
-#include "cpu_logger.hpp"
 
 // from common
 #include "sensor_device.hpp"
