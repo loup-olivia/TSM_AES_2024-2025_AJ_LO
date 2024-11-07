@@ -38,7 +38,7 @@ int main() {
         bikeSystem.start();
         advembsof::CPULogger _cpuLogger(timer);
         _cpuLogger.printStats();
-      
+
         bikeSystem.startWithEventQueue();
     }
 }
