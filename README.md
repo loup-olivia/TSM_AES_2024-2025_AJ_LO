@@ -62,12 +62,12 @@ When you run multiple tests for computing the response time of the reset event, 
 If you do not press long enough on the push button, the event may be missed and no reset happens.
 Based on the program itself and on the task scheduling, explain these two behaviors. Explain also why such behaviors may be problematic.
 
-With event driven implementation, it takes only 1-2us to perform the reset 
+With event driven implementation, it takes only 1-2us to perform the reset. The response time is also very short.
 
-![image](https://github.com/user-attachments/assets/46c32b65-da52-4010-81fb-67647a68fb09)
+![image](https://github.com/user-attachments/assets/1423de78-712a-4959-87f5-f744744e043d)
 
-Without them, the reset tasks takes 100ms to execute. You also need to be pressing the button at the right time to have your input validated. 
+Without events, the reset tasks takes 1us to execute. But the downside is that you have to press the button during the polling window which appens every 100ms
 
-![image](https://github.com/user-attachments/assets/9fb539e3-581d-4b6f-8e1c-72c7a341cf9b)
+![image](https://github.com/user-attachments/assets/ea48e775-f115-4762-aa06-b2187c68d888)
 
 For a safety feature like a reset button, it's very important to have it even-drivent. This ensures that the reset can happen anytime.
