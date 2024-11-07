@@ -49,11 +49,12 @@ By modifying the active wait with sleep_for() we can reduce the CPU usage time t
 
 ### Question 3
 If you run the static_scheduling_with_event program, what CPU usage do you observe? How can you explain the observed CPU uptime?
+![image](https://github.com/user-attachments/assets/b2fa0c13-f950-402a-8bc7-b565dbb1b8f3)
+
+The CPU usage time drop as low as 1%. This is achieved thank to the implementation of interrupts
+
 
 ### Question 4
-If you run the static_scheduling_with_event program, what CPU usage do you observe? How can you explain the observed CPU uptime?
-
-### Question 5
 When you run multiple tests for computing the response time of the reset event, what do you observe? Is there an improvement as compared to the static_scheduling::BikeSystem implementation?
 
 If you do not press long enough on the push button, the event may be missed and no reset happens.
