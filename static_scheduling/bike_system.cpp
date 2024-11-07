@@ -95,9 +95,11 @@ void BikeSystem::start() {
             std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
         tr_debug("Repeating cycle time is %" PRIu64 " milliseconds", cycle.count());
         bool exit = core_util_atomic_load_bool(&_stopFlag);
-
+        
+        #if !MBED_TEST_MODE
+            
+        #endif
         _cpuLogger.printStats();
-
         if (exit == true) {
             break;
         }
@@ -222,19 +224,18 @@ void BikeSystem::temperatureTask() {
     _currentTemperature = _sensorDevice.readTemperature();
 
     // simulate task computation by waiting for the required task computation time
+    /*
+        std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
+        while (elapsedTime < kTemperatureTaskComputationTime) {
+            elapsedTime = _timer.elapsed_time() - taskStartTime;
+        }*/
 
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    while (elapsedTime < kTemperatureTaskComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
-
-/*
     std::chrono::milliseconds elapsedTime =
         std::chrono::duration_cast<std::chrono::milliseconds>(_timer.elapsed_time() -
                                                               taskStartTime);
 
     ThisThread::sleep_for(kTemperatureTaskComputationTime - elapsedTime);
-*/
+
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kTemperatureTaskIndex, taskStartTime);
 }
@@ -261,18 +262,18 @@ void BikeSystem::displayTask1() {
     _displayDevice.displayDistance(_traveledDistance);
 
     // simulate task computation by waiting for the required task computation time
-
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    while (elapsedTime < kDisplayTask1ComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
-
-    /*std::chrono::milliseconds elapsedTime =
+    /*
+        std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
+        while (elapsedTime < kDisplayTask1ComputationTime) {
+            elapsedTime = _timer.elapsed_time() - taskStartTime;
+        }
+    */
+    std::chrono::milliseconds elapsedTime =
         std::chrono::duration_cast<std::chrono::milliseconds>(_timer.elapsed_time() -
                                                               taskStartTime);
 
     ThisThread::sleep_for(kDisplayTask1ComputationTime - elapsedTime);
-*/
+
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
 }
@@ -283,19 +284,19 @@ void BikeSystem::displayTask2() {
     _displayDevice.displayTemperature(_currentTemperature);
 
     // simulate task computation by waiting for the required task computation time
-
-    std::chrono::microseconds elapsedTime =
-    std::chrono::microseconds::zero();
-    while (elapsedTime < kDisplayTask2ComputationTime) {
-        elapsedTime = _timer.elapsed_time() - taskStartTime;
-    }
-/*
+    /*
+        std::chrono::microseconds elapsedTime =
+        std::chrono::microseconds::zero();
+        while (elapsedTime < kDisplayTask2ComputationTime) {
+            elapsedTime = _timer.elapsed_time() - taskStartTime;
+        }
+    */
     std::chrono::milliseconds elapsedTime =
         std::chrono::duration_cast<std::chrono::milliseconds>(_timer.elapsed_time() -
                                                               taskStartTime);
 
     ThisThread::sleep_for(kDisplayTask2ComputationTime - elapsedTime);
-*/
+
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask2Index, taskStartTime);
 }
