@@ -67,6 +67,7 @@ BikeSystem::BikeSystem()
 
 void BikeSystem::start() {
     tr_info("Starting Super-Loop without event handling");
+    tr_info("muuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuux");
 
     //added for cpu logging
     Timer timer;  // Créer une instance de Timer
@@ -96,10 +97,11 @@ void BikeSystem::start() {
         const auto cycle =
             std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
         tr_debug("Repeating cycle time is %" PRIu64 " milliseconds", cycle.count());
-
+        tr_info("muuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuux");
         bool exit = core_util_atomic_load_bool(&_stopFlag);
 
-        _cpuLogger.printStats();
+        //_cpuLogger.printStats();
+        
 
         if (exit == true) {
             break;
@@ -161,7 +163,6 @@ void BikeSystem::startWithEventQueue() {
     displayTask2Event.period(kDisplayTask2Period);
     displayTask2Event.post();
     tr_info("All tasks posted");
-
     eventQueue.dispatch_forever();
 }
 
