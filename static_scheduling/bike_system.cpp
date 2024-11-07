@@ -55,6 +55,7 @@ static constexpr std::chrono::milliseconds kTemperatureTaskComputationTime   = 1
 static constexpr std::chrono::milliseconds kDisplayTask2Period               = 1600ms;
 static constexpr std::chrono::milliseconds kDisplayTask2Delay                = 1200ms;
 static constexpr std::chrono::milliseconds kDisplayTask2ComputationTime      = 100ms;
+static constexpr std::chrono::milliseconds kMajorCycleDuration               = 1600ms;
 
 BikeSystem::BikeSystem()
     : _timer(),
@@ -97,9 +98,9 @@ void BikeSystem::start() {
         bool exit = core_util_atomic_load_bool(&_stopFlag);
         
         #if !MBED_TEST_MODE
-            
+         _cpuLogger.printStats();
         #endif
-        _cpuLogger.printStats();
+
         if (exit == true) {
             break;
         }
@@ -160,6 +161,15 @@ void BikeSystem::startWithEventQueue() {
     displayTask2Event.period(kDisplayTask2Period);
     displayTask2Event.post();
     tr_info("All tasks posted");
+
+    #if !MBED_TEST_MODE
+        Event<void()>printStatsEvent(&eventQueue,
+                                        callback(&_cpuLogger, &advembsof::CPULogger::printStats));
+        printStatsEvent.delay(kMajorCycleDuration);
+        printStatsEvent.period(kMajorCycleDuration);
+        printStatsEvent.post();
+    #endif
+
     eventQueue.dispatch_forever();
 }
 
