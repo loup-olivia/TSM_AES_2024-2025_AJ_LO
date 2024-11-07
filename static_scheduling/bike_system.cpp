@@ -29,6 +29,8 @@
 #include "gear_device.hpp"
 #include "mbed_trace.h"
 #include "rtos.h"
+#include "advdembsof_library/utils/cpu_logger.hpp"
+
 #if MBED_CONF_MBED_TRACE_ENABLE
 #define TRACE_GROUP "BikeSystem"
 #endif  // MBED_CONF_MBED_TRACE_ENABLE
@@ -66,6 +68,10 @@ BikeSystem::BikeSystem()
 void BikeSystem::start() {
     tr_info("Starting Super-Loop without event handling");
 
+    //added for cpu logging
+    Timer timer;  // Créer une instance de Timer
+    advembsof::CPULogger _cpuLogger(timer);
+
     init();
 
     while (true) {
@@ -92,6 +98,8 @@ void BikeSystem::start() {
         tr_debug("Repeating cycle time is %" PRIu64 " milliseconds", cycle.count());
 
         bool exit = core_util_atomic_load_bool(&_stopFlag);
+
+        _cpuLogger.printStats();
 
         if (exit == true) {
             break;
