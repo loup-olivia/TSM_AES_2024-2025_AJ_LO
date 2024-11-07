@@ -42,6 +42,10 @@ The CPU usage is very close to 100%. This is because we are doing an "active wai
 
 ### Question 2
 If you run the program after the change from busy wait to sleep calls, what CPU usage do you observe? How can you explain the observed CPU uptime?
+![image](https://github.com/user-attachments/assets/b46908c0-bac0-4191-ab7d-eed3edb2646a)
+
+By modifying the active wait with sleep_for() we can reduce the CPU usage time to 75%. This is because the CPU gets into sleep mode before executing the next instruction. The CPU usage is better but it must be optimized by adding a scheduler.
+
 
 ### Question 3
 If you run the static_scheduling_with_event program, what CPU usage do you observe? How can you explain the observed CPU uptime?
