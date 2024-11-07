@@ -116,13 +116,13 @@ void BikeSystem::start() {
     displayTask2Event.post();
     tr_info("All tasks posted");
 
-   // #if !MBED_TEST_MODE
-    Event<void()>printStatsEvent(&eventQueue,
-                                    callback(&_cpuLogger, &advembsof::CPULogger::printStats));
+#if !MBED_TEST_MODE
+    Event<void()> printStatsEvent(
+        &eventQueue, callback(&_cpuLogger, &advembsof::CPULogger::printStats));
     printStatsEvent.delay(kMajorCycleDuration);
     printStatsEvent.period(kMajorCycleDuration);
     printStatsEvent.post();
-   // #endif
+#endif
 
     eventQueue.dispatch_forever();
 }

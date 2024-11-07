@@ -96,10 +96,10 @@ void BikeSystem::start() {
             std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
         tr_debug("Repeating cycle time is %" PRIu64 " milliseconds", cycle.count());
         bool exit = core_util_atomic_load_bool(&_stopFlag);
-        
-        #if !MBED_TEST_MODE
-         _cpuLogger.printStats();
-        #endif
+
+#if !MBED_TEST_MODE
+        _cpuLogger.printStats();
+#endif
 
         if (exit == true) {
             break;
@@ -162,13 +162,13 @@ void BikeSystem::startWithEventQueue() {
     displayTask2Event.post();
     tr_info("All tasks posted");
 
-    #if !MBED_TEST_MODE
-        Event<void()>printStatsEvent(&eventQueue,
-                                        callback(&_cpuLogger, &advembsof::CPULogger::printStats));
-        printStatsEvent.delay(kMajorCycleDuration);
-        printStatsEvent.period(kMajorCycleDuration);
-        printStatsEvent.post();
-    #endif
+#if !MBED_TEST_MODE
+    Event<void()> printStatsEvent(
+        &eventQueue, callback(&_cpuLogger, &advembsof::CPULogger::printStats));
+    printStatsEvent.delay(kMajorCycleDuration);
+    printStatsEvent.period(kMajorCycleDuration);
+    printStatsEvent.post();
+#endif
 
     eventQueue.dispatch_forever();
 }
