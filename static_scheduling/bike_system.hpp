@@ -25,6 +25,7 @@
 #pragma once
 
 // from advembsof
+#include "cpu_logger.hpp"
 #include "display_device.hpp"
 #include "task_logger.hpp"
 
@@ -97,6 +98,9 @@ class BikeSystem {
     float _currentTemperature = 0.0f;
     // used for logging task info
     advembsof::TaskLogger _taskLogger;
+
+    // used for logging cpu usage
+    advembsof::CPULogger _cpuLogger;
 };
 
 }  // namespace static_scheduling

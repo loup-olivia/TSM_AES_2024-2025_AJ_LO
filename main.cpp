@@ -5,7 +5,6 @@
 
 #include <ctime>
 
-#include "advdembsof_library/utils/cpu_logger.hpp"
 #include "common/constants.hpp"
 #include "mbed-os/mbed.h"
 #include "mbed-trace/mbed_trace.h"
@@ -28,18 +27,17 @@ int main() {
     //     bool led = false;
     // #endif
 
-    Timer timer;  // Créer une instance de Timer
-
 #if defined(MBED_CONF_MBED_TRACE_ENABLE)
     mbed_trace_init();
 #endif
-    while (true) {
-        static_scheduling::BikeSystem bikeSystem;
-        bikeSystem.start();
-        advembsof::CPULogger _cpuLogger(timer);
-        _cpuLogger.printStats();
 
-        bikeSystem.startWithEventQueue();
+    while (true) {
+        //static_scheduling::BikeSystem bikeSystem;
+        static_scheduling_with_event::BikeSystem bikeSystem_with_event;
+
+        bikeSystem_with_event.start();
+        //bikeSystem.start();
+        // bikeSystem.startWithEventQueue();
     }
 }
 #endif

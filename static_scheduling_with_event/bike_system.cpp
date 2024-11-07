@@ -52,6 +52,7 @@ static constexpr std::chrono::milliseconds kTemperatureTaskComputationTime   = 1
 static constexpr std::chrono::milliseconds kDisplayTask2Period               = 1600ms;
 static constexpr std::chrono::milliseconds kDisplayTask2Delay                = 1200ms;
 static constexpr std::chrono::milliseconds kDisplayTask2ComputationTime      = 100ms;
+static constexpr std::chrono::milliseconds kMajorCycleDuration               = 1600ms;
 
 BikeSystem::BikeSystem()
     : _timer(),
@@ -60,7 +61,8 @@ BikeSystem::BikeSystem()
       _resetDevice(callback(this, &BikeSystem::onReset)),
       _speedometer(_timer),
       _displayDevice(),
-      _taskLogger() {}
+      _taskLogger(),
+      _cpuLogger(_timer) {}
 
 void BikeSystem::start() {
     tr_info("Starting Super-Loop with event handling");
@@ -113,6 +115,14 @@ void BikeSystem::start() {
     displayTask2Event.period(kDisplayTask2Period);
     displayTask2Event.post();
     tr_info("All tasks posted");
+
+#if !MBED_TEST_MODE
+    Event<void()> printStatsEvent(
+        &eventQueue, callback(&_cpuLogger, &advembsof::CPULogger::printStats));
+    printStatsEvent.delay(kMajorCycleDuration);
+    printStatsEvent.period(kMajorCycleDuration);
+    printStatsEvent.post();
+#endif
 
     eventQueue.dispatch_forever();
 }
