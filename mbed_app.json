@@ -16,7 +16,8 @@
         "platform.stdio-buffered-serial": true,
         "target.printf_lib":"minimal-printf",
         "platform.minimal-printf-enable-floating-point": true,
-        "platform.minimal-printf-set-floating-point-max-decimals": 2
+        "platform.minimal-printf-set-floating-point-max-decimals": 2,
+        "platform.all-stats-enabled": true
       },
       "DISCO_H747I": {
         "mbed-trace.enable": true,

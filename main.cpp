@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include <ctime>
+
+#include "advdembsof_library/utils/cpu_logger.hpp"
 #include "common/constants.hpp"
 #include "mbed-os/mbed.h"
 #include "mbed-trace/mbed_trace.h"
@@ -25,12 +28,17 @@ int main() {
     //     bool led = false;
     // #endif
 
+    Timer timer;  // Créer une instance de Timer
+
 #if defined(MBED_CONF_MBED_TRACE_ENABLE)
     mbed_trace_init();
 #endif
     while (true) {
         static_scheduling::BikeSystem bikeSystem;
         bikeSystem.start();
+        advembsof::CPULogger _cpuLogger(timer);
+        _cpuLogger.printStats();
+
         bikeSystem.startWithEventQueue();
     }
 }
