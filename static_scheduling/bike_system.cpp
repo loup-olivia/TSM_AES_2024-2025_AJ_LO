@@ -64,14 +64,15 @@ BikeSystem::BikeSystem()
       _speedometer(_timer),
       _displayDevice(),
       _sensorDevice(),
-      _taskLogger() {}
+      _taskLogger(),
+      _cpuLogger(_timer) {}
 
 void BikeSystem::start() {
     tr_info("Starting Super-Loop without event handling");
 
     //added for cpu logging
-    //Timer timer;  // Créer une instance de Timer
-    //advembsof::CPULogger _cpuLogger(timer);
+    Timer timer;  // Créer une instance de Timer
+    advembsof::CPULogger _cpuLogger(timer);
 
     init();
 
@@ -99,8 +100,8 @@ void BikeSystem::start() {
         tr_debug("Repeating cycle time is %" PRIu64 " milliseconds", cycle.count());
         bool exit = core_util_atomic_load_bool(&_stopFlag);
 
-        //_cpuLogger.printStats();
-        tr_info("cpu-stats");
+        _cpuLogger.printStats();
+
 
         if (exit == true) {
             break;
