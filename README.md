@@ -42,6 +42,7 @@ The CPU usage is very close to 100%. This is because we are doing an "active wai
 
 ### Question 2
 If you run the program after the change from busy wait to sleep calls, what CPU usage do you observe? How can you explain the observed CPU uptime?
+
 ![image](https://github.com/user-attachments/assets/b46908c0-bac0-4191-ab7d-eed3edb2646a)
 
 By modifying the active wait with sleep_for() we can reduce the CPU usage time to 75%. This is because the CPU gets into sleep mode before executing the next instruction. The CPU usage is better but it must be optimized by adding a scheduler.
@@ -49,6 +50,7 @@ By modifying the active wait with sleep_for() we can reduce the CPU usage time t
 
 ### Question 3
 If you run the static_scheduling_with_event program, what CPU usage do you observe? How can you explain the observed CPU uptime?
+
 ![image](https://github.com/user-attachments/assets/b2fa0c13-f950-402a-8bc7-b565dbb1b8f3)
 
 The CPU usage time drop as low as 1%. This is achieved thank to the implementation of interrupts
@@ -59,3 +61,13 @@ When you run multiple tests for computing the response time of the reset event, 
 
 If you do not press long enough on the push button, the event may be missed and no reset happens.
 Based on the program itself and on the task scheduling, explain these two behaviors. Explain also why such behaviors may be problematic.
+
+With event driven implementation, it takes only 1-2us to perform the reset 
+
+![image](https://github.com/user-attachments/assets/46c32b65-da52-4010-81fb-67647a68fb09)
+
+Without them, the reset tasks takes 100ms to execute. You also need to be pressing the button at the right time to have your input validated. 
+
+![image](https://github.com/user-attachments/assets/9fb539e3-581d-4b6f-8e1c-72c7a341cf9b)
+
+For a safety feature like a reset button, it's very important to have it even-drivent. This ensures that the reset can happen anytime.
