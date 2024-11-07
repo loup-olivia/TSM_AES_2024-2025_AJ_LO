@@ -34,9 +34,9 @@ int main() {
     while (true) {
         static_scheduling::BikeSystem bikeSystem;
         // static_scheduling_with_event::BikeSystem bikeSystem_with_event;
-
-        bikeSystem.start();
-        // bikeSystem.startWithEventQueue();
+        
+        //bikeSystem.start();
+        bikeSystem.startWithEventQueue();
     }
 }
 #endif
