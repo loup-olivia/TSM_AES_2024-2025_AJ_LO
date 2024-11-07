@@ -69,11 +69,7 @@ BikeSystem::BikeSystem()
 
 void BikeSystem::start() {
     tr_info("Starting Super-Loop without event handling");
-
-    //added for cpu logging
-    Timer timer;  // Créer une instance de Timer
-    advembsof::CPULogger _cpuLogger(timer);
-
+    
     init();
 
     while (true) {
