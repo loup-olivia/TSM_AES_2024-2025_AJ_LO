@@ -37,7 +37,7 @@ Test for part 2 mbed test -m DISCO_H747I -t GCC_ARM -n tests-bike-computer-bike-
 If you print CPU statistics at the end of every major cycle (in the super-loop), what CPU usage do you observe? How can you explain the observed CPU uptime? : 
 ![image](https://github.com/user-attachments/assets/e9345101-e321-40f7-8071-b02acbc93108)
 
-The CPU usage is very close to 100%. This is because we are doing an "active wait". By using the while loop, we keep the system active all the time.
+The CPU usage is very close to 100%. This is because we are doing an "active wait". By using the while loop as a scheduling method, we keep the system active all the time.
 
 
 ### Question 2
