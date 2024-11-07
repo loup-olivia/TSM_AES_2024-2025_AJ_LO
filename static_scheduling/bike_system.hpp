@@ -55,9 +55,11 @@ class BikeSystem {
     void startWithEventQueue();
 
     // method called for stopping the system
+    // cppcheck-suppress [unusedFunction, unmatchedSuppression]
     void stop();
 
 #if defined(MBED_TEST_MODE)
+    // cppcheck-suppress [unusedFunction, unmatchedSuppression]
     const advembsof::TaskLogger& getTaskLogger();
 #endif  // defined(MBED_TEST_MODE)
 
