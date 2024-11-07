@@ -25,6 +25,7 @@
 #pragma once
 
 // from advembsof
+#include "Timer.h"
 #include "display_device.hpp"
 #include "task_logger.hpp"
 
@@ -37,7 +38,7 @@
 #include "pedal_device.hpp"
 #include "reset_device.hpp"
 
-namespace static_scheduling {
+namespace static_scheduling_with_event {
 
 class BikeSystem {
    public:
@@ -51,15 +52,10 @@ class BikeSystem {
     // method called in main() for starting the system
     void start();
 
-    // Method called in main() for scheduling event calls
-    void startWithEventQueue();
-
     // method called for stopping the system
-    // cppcheck-suppress [unusedFunction, unmatchedSuppression]
     void stop();
 
 #if defined(MBED_TEST_MODE)
-    // cppcheck-suppress [unusedFunction, unmatchedSuppression]
     const advembsof::TaskLogger& getTaskLogger();
 #endif  // defined(MBED_TEST_MODE)
 
@@ -72,6 +68,8 @@ class BikeSystem {
     void resetTask();
     void displayTask1();
     void displayTask2();
+
+    void onReset();
 
     // stop flag, used for stopping the super-loop (set in stop())
     bool _stopFlag = false;
@@ -97,6 +95,10 @@ class BikeSystem {
     float _currentTemperature = 0.0f;
     // used for logging task info
     advembsof::TaskLogger _taskLogger;
+
+    // used to register the occurence of the reset
+    std::chrono::microseconds _resetTime = std::chrono::microseconds::zero();
+    volatile bool _resetFlag             = false;
 };
 
-}  // namespace static_scheduling
+}  // namespace static_scheduling_with_event

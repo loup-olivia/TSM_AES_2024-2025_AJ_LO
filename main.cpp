@@ -10,6 +10,8 @@
 #include "mbed-os/mbed.h"
 #include "mbed-trace/mbed_trace.h"
 #include "static_scheduling/bike_system.hpp"
+#include "static_scheduling_with_event/bike_system.hpp"
+
 //  Blinking rate in milliseconds
 #define BLINKING_RATE 500ms
 
@@ -36,6 +38,8 @@ int main() {
         bikeSystem.start();
         advembsof::CPULogger _cpuLogger(timer);
         _cpuLogger.printStats();
+      
+        bikeSystem.startWithEventQueue();
     }
 }
 #endif
