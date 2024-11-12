@@ -33,6 +33,8 @@ to wait for 799ms until the input can be red again.
 # Part 2
 Test for part 2
 ```mbed test -m DISCO_H747I -t GCC_ARM -n tests-bike-computer-bike-system,tests-bike-computer-sensor-device,tests-bike-computer-speedometer --compile --run --clean```
+```mbed test -m DISCO_H747I -t ARMC6 -n tests-bike-computer-bike-system,tests-bike-computer-sensor-device,tests-bike-computer-speedometer --compile --run --clean --profile release```
+On ARMC6 compiler, the profile has to be forced otherwise, the compiler doesn'toptimzie things the same way and timings are not respected.
 
 ### Question  1 
 If you print CPU statistics at the end of every major cycle (in the super-loop), what CPU usage do you observe? How can you explain the observed CPU uptime? : 
