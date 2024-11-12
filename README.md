@@ -31,10 +31,16 @@ to wait for 799ms until the input can be red again.
 ![Screenshot from 2024-10-22 01-32-50](https://github.com/user-attachments/assets/7969784a-385c-4cdf-b618-e00cea3fb4b3)
 
 # Part 2
-Test for part 2 mbed test -m DISCO_H747I -t GCC_ARM -n tests-bike-computer-bike-system --compile --run -v
+Test for part 2
+
+```mbed test -m DISCO_H747I -t GCC_ARM -n tests-bike-computer-bike-system,tests-bike-computer-sensor-device,tests-bike-computer-speedometer --compile --run --clean```
+
+```mbed test -m DISCO_H747I -t ARMC6 -n tests-bike-computer-bike-system,tests-bike-computer-sensor-device,tests-bike-computer-speedometer --compile --run --clean --profile release```
+On ARMC6 compiler, the profile has to be forced otherwise, the compiler doesn'toptimzie things the same way and timings are not respected.
 
 ### Question  1 
 If you print CPU statistics at the end of every major cycle (in the super-loop), what CPU usage do you observe? How can you explain the observed CPU uptime? : 
+
 ![image](https://github.com/user-attachments/assets/e9345101-e321-40f7-8071-b02acbc93108)
 
 The CPU usage is very close to 100%. This is because we are doing an "active wait". By using the while loop as a scheduling method, we keep the system active all the time.
