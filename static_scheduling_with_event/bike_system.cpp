@@ -62,12 +62,18 @@ BikeSystem::BikeSystem()
       _speedometer(_timer),
       _displayDevice(),
       _taskLogger(),
-      _cpuLogger(_timer) {}
+      _cpuLogger(_timer),
+      _memoryLogger() {}
 
 void BikeSystem::start() {
     tr_info("Starting Super-Loop with event handling");
 
     init();
+
+    //Print memory statistics 
+    _memoryLogger.getAndPrintStatistics();
+
+
 
     EventQueue eventQueue;  // create the event queue
 

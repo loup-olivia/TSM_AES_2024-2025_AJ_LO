@@ -29,6 +29,7 @@
 #include "cpu_logger.hpp"
 #include "display_device.hpp"
 #include "task_logger.hpp"
+#include "memory_logger.hpp"
 
 // from common
 #include "sensor_device.hpp"
@@ -55,6 +56,7 @@ class BikeSystem {
 
     // method called for stopping the system
     void stop();
+
 
 #if defined(MBED_TEST_MODE)
     const advembsof::TaskLogger& getTaskLogger();
@@ -101,9 +103,14 @@ class BikeSystem {
     // used for logging cpu usage
     advembsof::CPULogger _cpuLogger;
 
+    //Adding a memory logger instance
+    advembsof::MemoryLogger _memoryLogger;
+
     // used to register the occurence of the reset
     std::chrono::microseconds _resetTime = std::chrono::microseconds::zero();
     volatile bool _resetFlag             = false;
+
+
 };
 
 }  // namespace static_scheduling_with_event
