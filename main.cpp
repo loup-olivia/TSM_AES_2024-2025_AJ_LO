@@ -51,10 +51,10 @@ int main() {
     memoryLogger.getAndPrintThreadStatistics();
 
     // wait for the thread to exit (will not because of infinite loop)
-    waitOnButton.wait_exit();
+    //waitOnButton.wait_exit();
     // or do busy waiting
-    // while (true) {
-    //}
+    while (true) {
+    }
 
     return 0;
 }

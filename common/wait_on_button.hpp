@@ -41,7 +41,7 @@ namespace multi_tasking {
 class WaitOnButton {
 public:
     explicit WaitOnButton(const char* threadName) :
-        _thread(osPriorityNormal, OS_STACK_SIZE, nullptr, threadName),
+        _thread(osPriorityBelowNormal, OS_STACK_SIZE, nullptr, threadName),
         _pushButton(PUSH_BUTTON) 
     {
         _pushButton.fall(callback(this, &WaitOnButton::buttonPressed));
