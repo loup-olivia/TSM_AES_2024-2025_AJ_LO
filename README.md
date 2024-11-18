@@ -109,3 +109,29 @@ Since priority is above normal, the os will stop everything to perform the task
 No button press are recorded. This is because the os won't stop it's current task
 to record the button press. Since the ongoing task is a while(true){}. We never
 record the button press.
+
+### Exercise 2 
+The implementation of the mutex is done as followed : 
+```c
+...
+        DateTimeType dt = {0};
+
+        mstd::lock_guard<mstd::mutex> lock(_timeMutex); 
+        //implementing mutex for shared ressources
+        dt.day = _currentTime.day;
+        dt.hour = _currentTime.hour;
+
+        dt.minute = _currentTime.minute;
+        dt.second = _currentTime.second;
+...
+
+...
+    void updateCurrentTime() {
+        mstd::lock_guard<mstd::mutex> lock(_timeMutex); 
+        //implementing mutex for shared ressources
+        _currentTime.second += std::chrono::duration_cast<std::chrono::seconds>(
+            clockUpdateTimeout).count();
+...
+```
+
+jhbjhb
