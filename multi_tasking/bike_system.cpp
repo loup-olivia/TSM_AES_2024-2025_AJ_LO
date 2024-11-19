@@ -32,7 +32,7 @@
 #define TRACE_GROUP "BikeSystem"
 #endif  // MBED_CONF_MBED_TRACE_ENABLE
 
-namespace static_scheduling_with_event {
+namespace multi_tasking {
 
 static constexpr std::chrono::milliseconds kGearTaskPeriod                   = 800ms;
 static constexpr std::chrono::milliseconds kGearTaskDelay                    = 0ms;

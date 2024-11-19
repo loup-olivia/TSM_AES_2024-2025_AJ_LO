@@ -26,7 +26,7 @@
 
 #include "mbed.h"
 
-namespace static_scheduling_with_event {
+namespace multi_tasking {
 
 class ResetDevice {
    public:

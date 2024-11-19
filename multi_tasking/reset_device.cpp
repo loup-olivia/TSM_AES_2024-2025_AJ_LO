@@ -13,10 +13,10 @@
 // limitations under the License.
 
 /****************************************************************************
- * @file gear_device.hpp
+ * @file reset_device.cpp
  * @author Serge Ayer <serge.ayer@hefr.ch>
  *
- * @brief Gear Device header file (static scheduling)
+ * @brief ResetDevice header file (static scheduling)
  *
  * @date 2023-08-20
  * @version 1.0.0
@@ -24,29 +24,27 @@
 
 #pragma once
 
+#include "reset_device.hpp"
+
+#include <chrono>
+
+#include "PinNames.h"
 #include "constants.hpp"
 #include "mbed.h"
 
-namespace static_scheduling_with_event {
+#if defined(TARGET_DISCO_H747I)
+#define PUSH_BUTTON BUTTON1
+static constexpr uint8_t kPolarityPressed = 1;
+#endif
 
-class GearDevice {
-   public:
-    GearDevice();  // NOLINT(runtime/references)
+#if MBED_CONF_MBED_TRACE_ENABLE
+#define TRACE_GROUP "ResetDevice"
+#endif  // MBED_CONF_MBED_TRACE_ENABLE
 
-    // make the class non copyable
-    GearDevice(GearDevice&)            = delete;
-    GearDevice& operator=(GearDevice&) = delete;
+namespace multi_tasking {
 
-    // method called for updating the bike system
-    uint8_t getCurrentGear();
-    uint8_t getCurrentGearSize() const;
-
-   private:
-    void onJoystickUp();
-    void onJoystickDown();
-
-    // data members
-    uint8_t _currentGear = bike_computer::kMinGear;
-};
+ResetDevice::ResetDevice(mbed::Callback<void()> cb) : _resetButton(PUSH_BUTTON) {
+    _resetButton.fall(cb);
+}
 
 }  // namespace static_scheduling_with_event

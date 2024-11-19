@@ -10,6 +10,7 @@
 #include "mbed-trace/mbed_trace.h"
 #include "static_scheduling/bike_system.hpp"
 #include "static_scheduling_with_event/bike_system.hpp"
+#include "multi_tasking/bike_system.hpp"
 
 //  Blinking rate in milliseconds
 #define BLINKING_RATE 500ms
@@ -33,9 +34,11 @@ int main() {
 
     while (true) {
         // static_scheduling::BikeSystem bikeSystem;
-        static_scheduling_with_event::BikeSystem bikeSystem_with_event;
-
-        bikeSystem_with_event.start();
+        //static_scheduling_with_event::BikeSystem bikeSystem_with_event;
+        multi_tasking::BikeSystem bike_system_multi_tasking;
+      
+        bike_system_multi_tasking.start();
+        //bikeSystem_with_event.start();
         // bikeSystem.start();
         //  bikeSystem.startWithEventQueue();
     }

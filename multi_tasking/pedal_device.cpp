@@ -34,7 +34,7 @@
 #define TRACE_GROUP "PedalDevice"
 #endif  // MBED_CONF_MBED_TRACE_ENABLE
 
-namespace static_scheduling_with_event {
+namespace multi_tasking {
 
 PedalDevice::PedalDevice() {
     // register the joystick event handler

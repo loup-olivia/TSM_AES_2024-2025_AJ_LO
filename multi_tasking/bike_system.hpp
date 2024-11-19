@@ -39,7 +39,7 @@
 #include "pedal_device.hpp"
 #include "reset_device.hpp"
 
-namespace static_scheduling_with_event {
+namespace multi_tasking {
 
 class BikeSystem {
    public:
