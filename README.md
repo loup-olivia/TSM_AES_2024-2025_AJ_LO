@@ -77,3 +77,61 @@ Without events, the reset tasks takes 1us to respond. But the downside is that y
 ![image](https://github.com/user-attachments/assets/ea48e775-f115-4762-aa06-b2187c68d888)
 
 For a safety feature like a reset button, it's very important to have it even-drivent. This ensures that the reset can happen anytime.
+
+
+# Multi-tasking in MbedOS
+
+### Exercise 1
+Latency times on button press for each senarios are reported bellow
+#### case 1 : The main thread is in waiting state
+[DBG ][WaitOnButton]: Button pressed with response time: 12 usecs
+[DBG ][WaitOnButton]: Waiting for button press
+
+This is a pretty standard response time for an interrupt driven input.
+
+
+#### case 2 : Replace the call to Thread::join in the main function with a busy infinite wait while (true) {}
+[DBG ][WaitOnButton]: Button pressed with response time: 232 usecs
+[DBG ][WaitOnButton]: Waiting for button press
+[DBG ][WaitOnButton]: Button pressed with response time: 925 usecs
+[DBG ][WaitOnButton]: Waiting for button press
+
+the response time varries between 100us and 950us. Since we are doing busy waiting, 
+the response time can change depending if the wait is close to the end.
+
+#### case 3 : With a busy wait, modifiy the priority to osPriorityAboveNormal
+[DBG ][WaitOnButton]: Button pressed with response time: 5 usecs
+[DBG ][WaitOnButton]: Waiting for button press
+
+Since priority is above normal, the os will stop everything to perform the task
+
+#### case 4 : With a busy wait, modifiy the priority to osPriorityBelowNormal
+No button press are recorded. This is because the os won't stop it's current task
+to record the button press. Since the ongoing task is a while(true){}. We never
+record the button press.
+
+### Exercise 2 
+The implementation of the mutex is done as followed : 
+```c
+...
+        DateTimeType dt = {0};
+
+        mstd::lock_guard<mstd::mutex> lock(_timeMutex); 
+        //implementing mutex for shared ressources
+        dt.day = _currentTime.day;
+        dt.hour = _currentTime.hour;
+
+        dt.minute = _currentTime.minute;
+        dt.second = _currentTime.second;
+...
+
+...
+    void updateCurrentTime() {
+        mstd::lock_guard<mstd::mutex> lock(_timeMutex); 
+        //implementing mutex for shared ressources
+        _currentTime.second += std::chrono::duration_cast<std::chrono::seconds>(
+            clockUpdateTimeout).count();
+...
+```
+
+jhbjhb
