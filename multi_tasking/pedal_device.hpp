@@ -46,6 +46,12 @@ class PedalDevice {
     // private methods
     void increaseRotationSpeed();
     void decreaseRotationSpeed();
+    void postEvent();
+
+    // Eventqueue
+    EventQueue& _eventQueue;
+    // Callbacks
+    mbed::Callback<void(uint8_t, uint8_t)> _cb;
 
     volatile uint32_t _currentStep = static_cast<uint32_t>(
         (bike_computer::kInitialPedalRotationTime - bike_computer::kMinPedalRotationTime)

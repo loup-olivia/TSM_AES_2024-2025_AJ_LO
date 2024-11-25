@@ -40,18 +40,15 @@ static constexpr std::chrono::milliseconds kGearTaskComputationTime          = 1
 static constexpr std::chrono::milliseconds kSpeedDistanceTaskPeriod          = 400ms;
 static constexpr std::chrono::milliseconds kSpeedDistanceTaskDelay           = 0ms;
 static constexpr std::chrono::milliseconds kSpeedDistanceTaskComputationTime = 200ms;
-static constexpr std::chrono::milliseconds kDisplayTask1Period               = 1600ms;
-static constexpr std::chrono::milliseconds kDisplayTask1Delay                = 300ms;
-static constexpr std::chrono::milliseconds kDisplayTask1ComputationTime      = 200ms;
+static constexpr std::chrono::milliseconds kDisplayTaskPeriod               = 1600ms;
+static constexpr std::chrono::milliseconds kDisplayTaskDelay                = 300ms;
+static constexpr std::chrono::milliseconds kDisplayTaskComputationTime      = 500ms;
 static constexpr std::chrono::milliseconds kResetTaskPeriod                  = 800ms;
 static constexpr std::chrono::milliseconds kResetTaskDelay                   = 700ms;
 static constexpr std::chrono::milliseconds kResetTaskComputationTime         = 100ms;
 static constexpr std::chrono::milliseconds kTemperatureTaskPeriod            = 1600ms;
 static constexpr std::chrono::milliseconds kTemperatureTaskDelay             = 1100ms;
 static constexpr std::chrono::milliseconds kTemperatureTaskComputationTime   = 100ms;
-static constexpr std::chrono::milliseconds kDisplayTask2Period               = 1600ms;
-static constexpr std::chrono::milliseconds kDisplayTask2Delay                = 1200ms;
-static constexpr std::chrono::milliseconds kDisplayTask2ComputationTime      = 100ms;
 static constexpr std::chrono::milliseconds kMajorCycleDuration               = 1600ms;
 
 BikeSystem::BikeSystem()
@@ -81,6 +78,7 @@ void BikeSystem::start() {
     gearEvent.delay(kGearTaskDelay);    // define the delay between two calls of the task
     gearEvent.period(kGearTaskPeriod);  // define the period
     gearEvent.post();                   // schedule the task to the event queue
+    
     // Schedule the speedDistance task
     Event<void()> speedDistanceEvent(&eventQueue,
                                      callback(this, &BikeSystem::speedDistanceTask));
@@ -102,18 +100,13 @@ void BikeSystem::start() {
     resetTaskEvent.post();
 
     // Schedule the displayTask1
-    Event<void()> displayTask1Event(&eventQueue,
-                                    callback(this, &BikeSystem::displayTask1));
-    displayTask1Event.delay(kDisplayTask1Delay);
-    displayTask1Event.period(kDisplayTask1Period);
-    displayTask1Event.post();
+    Event<void()> displayTaskEvent(&eventQueue,
+                                    callback(this, &BikeSystem::displayTask));
+    displayTaskEvent.delay(kDisplayTaskDelay);
+    displayTaskEvent.period(kDisplayTaskPeriod);
+    displayTaskEvent.post();
 
-    // Schedule the displayTask2
-    Event<void()> displayTask2Event(&eventQueue,
-                                    callback(this, &BikeSystem::displayTask2));
-    displayTask2Event.delay(kDisplayTask2Delay);
-    displayTask2Event.period(kDisplayTask2Period);
-    displayTask2Event.post();
+
     tr_info("All tasks posted");
 
 #if !MBED_TEST_MODE
@@ -210,26 +203,15 @@ void BikeSystem::resetTask() {
         _timer, advembsof::TaskLogger::kResetTaskIndex, taskStartTime);
 }
 
-void BikeSystem::displayTask1() {
+void BikeSystem::displayTask() {
     auto taskStartTime = _timer.elapsed_time();
 
     _displayDevice.displayGear(_currentGear);
     _displayDevice.displaySpeed(_currentSpeed);
     _displayDevice.displayDistance(_traveledDistance);
+    _displayDevice.displayTemperature(_currentTemperature);
 
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
 }
-
-void BikeSystem::displayTask2() {
-    auto taskStartTime = _timer.elapsed_time();
-
-    _displayDevice.displayTemperature(_currentTemperature);
-
-    // simulate task computation by waiting for the required task computation time
-
-    _taskLogger.logPeriodAndExecutionTime(
-        _timer, advembsof::TaskLogger::kDisplayTask2Index, taskStartTime);
-}
-
 }  // namespace static_scheduling_with_event

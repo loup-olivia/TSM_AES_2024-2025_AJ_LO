@@ -29,6 +29,7 @@
 #include "cpu_logger.hpp"
 #include "display_device.hpp"
 #include "task_logger.hpp"
+#include "memory_logger.hpp"
 
 // from common
 #include "sensor_device.hpp"
@@ -67,8 +68,8 @@ class BikeSystem {
     void speedDistanceTask();
     void temperatureTask();
     void resetTask();
-    void displayTask1();
-    void displayTask2();
+    void displayTask();
+
 
     void onReset();
 
@@ -100,6 +101,9 @@ class BikeSystem {
 
     // used for logging cpu usage
     advembsof::CPULogger _cpuLogger;
+
+    //Adding a memory logger instance
+    advembsof::MemoryLogger _memoryLogger;
 
     // used to register the occurence of the reset
     std::chrono::microseconds _resetTime = std::chrono::microseconds::zero();

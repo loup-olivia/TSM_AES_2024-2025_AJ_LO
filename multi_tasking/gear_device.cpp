@@ -27,6 +27,7 @@
 // from disco_h747i/wrappers
 #include <chrono>
 
+#include "Callback.h"
 #include "joystick.hpp"
 #include "mbed_trace.h"
 
@@ -36,7 +37,9 @@
 
 namespace multi_tasking {
 
-GearDevice::GearDevice() {
+GearDevice::GearDevice(EventQueue& eventQueue, mbed::Callback<void(uint8_t, uint8_t)> cb)
+    : _eventQueue(eventQueue), _cb(cb){
+
     // register the joystick event handler
     disco::Joystick::getInstance().setUpCallback(
         mbed::callback(this, &GearDevice::onJoystickUp));
@@ -47,12 +50,14 @@ GearDevice::GearDevice() {
 void GearDevice::onJoystickUp() {
     if (core_util_atomic_load_u8(&_currentGear) < bike_computer::kMaxGear) {
         core_util_atomic_incr_u8(&_currentGear, 1);
+        postEvent();
     }
 }
 
 void GearDevice::onJoystickDown() {
     if (core_util_atomic_load_u8(&_currentGear) > bike_computer::kMinGear) {
         core_util_atomic_decr_u8(&_currentGear, 1);
+        postEvent();
     }
 }
 
@@ -62,4 +67,8 @@ uint8_t GearDevice::getCurrentGearSize() const {
     return bike_computer::kMaxGearSize - core_util_atomic_load_u8(&_currentGear);
 }
 
+void GearDevice::postEvent() {
+    Event<void(uint8_t, uint8_t)> event(&_eventQueue, _cb);
+    event.post(getCurrentGear(), getCurrentGearSize());
+}
 }  // namespace static_scheduling_with_event

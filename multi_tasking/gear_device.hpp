@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "InterruptIn.h"
 #include "constants.hpp"
 #include "mbed.h"
 
@@ -31,7 +32,7 @@ namespace multi_tasking {
 
 class GearDevice {
    public:
-    GearDevice();  // NOLINT(runtime/references)
+    GearDevice(EventQueue& eventQueue, mbed::Callback<void(uint8_t, uint8_t)> cb);  // NOLINT(runtime/references)
 
     // make the class non copyable
     GearDevice(GearDevice&)            = delete;
@@ -44,9 +45,16 @@ class GearDevice {
    private:
     void onJoystickUp();
     void onJoystickDown();
+    void postEvent();
 
     // data members
     uint8_t _currentGear = bike_computer::kMinGear;
+
+    // Eventqueue
+    EventQueue& _eventQueue;
+    // Callbacks
+    mbed::Callback<void(uint8_t, uint8_t)> _cb;
+
 };
 
 }  // namespace static_scheduling_with_event
