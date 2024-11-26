@@ -61,6 +61,9 @@ BikeSystem::BikeSystem()
       _taskLogger(),
       _cpuLogger(_timer) {}
 
+      //ajouter le memorylogger pour faire getAndPrintStatistics()
+      //comme dans le codelab multi-tasking ajouter aussi un printDiff()
+
 void BikeSystem::start() {
     tr_info("Starting Super-Loop with event handling");
 
