@@ -31,7 +31,7 @@ namespace multi_tasking {
 
 class PedalDevice {
    public:
-    PedalDevice();  // NOLINT(runtime/references)
+    PedalDevice(EventQueue& eventQueue, mbed::Callback<void(uint8_t, uint8_t)> cb);  // NOLINT(runtime/references)
 
     // make the class non copyable
     PedalDevice(PedalDevice&)            = delete;

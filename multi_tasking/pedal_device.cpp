@@ -36,12 +36,14 @@
 
 namespace multi_tasking {
 
-PedalDevice::PedalDevice() {
+PedalDevice::PedalDevice(EventQueue& eventQueue, mbed::Callback<void(uint8_t, uint8_t)> cb)
+    : _eventQueue(eventQueue), _cb(cb) {
     // register the joystick event handler
     disco::Joystick::getInstance().setLeftCallback(
         mbed::callback(this, &PedalDevice::onJoystickLeft));
     disco::Joystick::getInstance().setRightCallback(
         mbed::callback(this, &PedalDevice::onJoystickRight));
+    postEvent();
 }
 
 std::chrono::milliseconds PedalDevice::getCurrentRotationTime() {
@@ -53,17 +55,24 @@ std::chrono::milliseconds PedalDevice::getCurrentRotationTime() {
 void PedalDevice::increaseRotationSpeed() {
     if (core_util_atomic_load_u32(&_currentStep) > 0) {
         core_util_atomic_decr_u32(&_currentStep, 1);
+        postEvent();
     }
 }
 
 void PedalDevice::decreaseRotationSpeed() {
     if (core_util_atomic_load_u32(&_currentStep) < kNbSteps) {
         core_util_atomic_incr_u32(&_currentStep, 1);
+        postEvent();
     }
 }
 
 void PedalDevice::onJoystickLeft() { decreaseRotationSpeed(); }
 
 void PedalDevice::onJoystickRight() { increaseRotationSpeed(); }
+
+void PedalDevice::postEvent() {
+    Event<void(const std::chrono::milliseconds&)> event(&_eventQueue, _cb);
+    event.post(getCurrentRotationTime());
+}
 
 }  // namespace static_scheduling_with_event
