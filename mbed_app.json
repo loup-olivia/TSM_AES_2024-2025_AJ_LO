@@ -4,7 +4,7 @@
     ],
     "config": {
       "main-stack-size": {
-       "value": 4096
+       "value": 8192
       }
     },
     "target_overrides": {
@@ -17,13 +17,13 @@
         "target.printf_lib":"minimal-printf",
         "platform.minimal-printf-enable-floating-point": true,
         "platform.minimal-printf-set-floating-point-max-decimals": 2,
-        "platform.all-stats-enabled": true
+        "platform.all-stats-enabled": true,
+        "platform.heap-stats-enabled": true,
+        "platform.stack-stats-enabled": true
       },
       "DISCO_H747I": {
         "mbed-trace.enable": true,
         "mbed-trace.max-level": "TRACE_LEVEL_DEBUG"   
-        
-           
       }
     }
   }

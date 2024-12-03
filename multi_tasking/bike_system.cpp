@@ -26,6 +26,7 @@
 
 #include <chrono>
 
+#include "Callback.h"
 #include "gear_device.hpp"
 #include "mbed_trace.h"
 #if MBED_CONF_MBED_TRACE_ENABLE
@@ -53,8 +54,9 @@ static constexpr std::chrono::milliseconds kMajorCycleDuration               = 1
 
 BikeSystem::BikeSystem()
     : _timer(),
-      _gearDevice(),
-      _pedalDevice(),
+      _eventQueue(),
+      _gearDevice(_eventQueue, callback(this, &BikeSystem::onGearChange)),
+      _pedalDevice(_eventQueue, callback(this, &BikeSystem::onSpeedChange)),
       _resetDevice(callback(this, &BikeSystem::onReset)),
       _speedometer(_timer),
       _displayDevice(),
@@ -123,7 +125,10 @@ void BikeSystem::start() {
     eventQueue.dispatch_forever();
 }
 
-void BikeSystem::stop() { core_util_atomic_store_bool(&_stopFlag, true); }
+void BikeSystem::stop() { 
+    //ajout d'un break dispatch à faire
+    core_util_atomic_store_bool(&_stopFlag, true); 
+}
 
 #if defined(MBED_TEST_MODE)
 const advembsof::TaskLogger& BikeSystem::getTaskLogger() { return _taskLogger; }
@@ -159,6 +164,10 @@ void BikeSystem::gearTask() {
 
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kGearTaskIndex, taskStartTime);
+}
+
+void BikeSystem::onGearChange(){
+
 }
 
 void BikeSystem::speedDistanceTask() {

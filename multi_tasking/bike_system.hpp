@@ -25,6 +25,7 @@
 #pragma once
 
 // from advembsof
+#include "EventQueue.h"
 #include "Timer.h"
 #include "cpu_logger.hpp"
 #include "display_device.hpp"
@@ -70,8 +71,9 @@ class BikeSystem {
     void resetTask();
     void displayTask();
 
-
     void onReset();
+
+    EventQueue _eventQueue;
 
     // stop flag, used for stopping the super-loop (set in stop())
     bool _stopFlag = false;
