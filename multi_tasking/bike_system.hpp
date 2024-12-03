@@ -73,7 +73,7 @@ class BikeSystem {
 
     void onReset();
 
-    EventQueue _eventQueue;
+    EventQueue _eventQueue_periodic;
 
     // stop flag, used for stopping the super-loop (set in stop())
     bool _stopFlag = false;

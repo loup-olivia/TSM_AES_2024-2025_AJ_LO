@@ -54,7 +54,7 @@ static constexpr std::chrono::milliseconds kMajorCycleDuration               = 1
 
 BikeSystem::BikeSystem()
     : _timer(),
-      _eventQueue(),
+      _eventQueue_periodic(),
       _gearDevice(_eventQueue, callback(this, &BikeSystem::onGearChange)),
       _pedalDevice(_eventQueue, callback(this, &BikeSystem::onSpeedChange)),
       _resetDevice(callback(this, &BikeSystem::onReset)),
