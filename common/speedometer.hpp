@@ -82,7 +82,7 @@ class Speedometer {
     float _currentSpeed = 0.0f;
     Mutex _totalDistanceMutex;
     float _totalDistance = 0.0f;
-    uint8_t _gearSize    = 19; //corresponds with min gear
+    uint8_t _gearSize    = 19;  // corresponds with min gear
 
     Thread _thread;
 
