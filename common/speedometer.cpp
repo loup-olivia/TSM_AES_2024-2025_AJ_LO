@@ -112,10 +112,11 @@ void Speedometer::computeSpeed() {
     // Distance run with one pedal turn (wheel circumference = 2.10 m) = 50/15 * 2.1 m
     // = 6.99m If you ride at 80 pedal turns / min, you run a distance of 6.99 * 80 / min
     // ~= 560 m / min = 33.6 km/h
+    tr_debug("gearSize %d", _gearSize);
 
     float gearRatio   = static_cast<float>(kTraySize) / static_cast<float>(_gearSize);
     float distPerTurn = kWheelCircumference * gearRatio;
-
+    tr_debug("gearRatio %f", gearRatio);
     _currentSpeed =
         distPerTurn * 3600.0f /
         std::chrono::duration_cast<std::chrono::milliseconds>(_pedalRotationTime).count();

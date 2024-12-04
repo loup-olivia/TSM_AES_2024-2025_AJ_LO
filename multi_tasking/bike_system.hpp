@@ -65,8 +65,6 @@ class BikeSystem {
    private:
     // private methods
     void init();
-    void gearTask();
-    void speedDistanceTask();
     void temperatureTask();
     void resetTask();
     void displayTask();
@@ -76,6 +74,7 @@ class BikeSystem {
     void onGearEvent(uint8_t gear, uint8_t gearSize);
 
     EventQueue _eventQueue_periodic; //used for periodic and datadriven events
+    EventQueue _eventQueue_ISR; //used for ISRs
 
     // stop flag, used for stopping the super-loop (set in stop())
     bool _stopFlag = false;
