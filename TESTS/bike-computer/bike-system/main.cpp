@@ -23,6 +23,7 @@
  ***************************************************************************/
 
 #include <chrono>
+#include <cstdint>
 
 #include "EventQueue.h"
 #include "gear_device.hpp"
@@ -204,16 +205,27 @@ static void test_gear_multi_tasking_bike_system(){
     // test reset on BikeSystem
     bikeSystem.getSpeedometer().setOnResetCallback(resetCallback);
 
-
+    multi_tasking::GearDevice& gearDevice = bikeSystem.getGearDevice(); 
 
     // check for gear up
     constexpr uint8_t kNbrOfGearUp            = 10;
     for (uint8_t i = 0; i < kNbrOfGearUp; i++) {
-        
+        uint8_t actualGear = bikeSystem.getCurrentGear();
+        printf("actualGear : %d", actualGear);
+        gearDevice.onJoystickUp();
+
+
 
     }
         // let the bike system run for 2 secs
         ThisThread::sleep_for(2s);
+    
+    //check for gear down
+    constexpr uint8_t kNbrOfGearDown = 10;
+    for (uint8_t i = 0; i < kNbrOfGearDown; i++) {
+
+
+    }
             
 
     // stop the bike system
@@ -302,8 +314,10 @@ static Case cases[] = {
     //Case("test bike system", test_bike_system),
     //Case("test bike system with event queue", test_bike_system_event_queue),
     //Case("test bike system with event", test_bike_system_with_event),
-    Case("test bike system multi tasking", test_multi_tasking_bike_system),
-    Case("test bike system reset multi tasking", test_reset_multi_tasking_bike_system)};
+    //Case("test bike system multi tasking", test_multi_tasking_bike_system),
+    //Case("test bike system reset multi tasking", test_reset_multi_tasking_bike_system)
+      Case("test bike system gear multi tasking", test_gear_multi_tasking_bike_system)  
+    };
 
 static Specification specification(greentea_setup, cases);
 
