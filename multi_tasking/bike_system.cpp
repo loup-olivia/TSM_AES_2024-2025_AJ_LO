@@ -46,10 +46,11 @@ static constexpr std::chrono::milliseconds kMajorCycleDuration               = 1
 
 BikeSystem::BikeSystem()
     : _timer(),
-      _eventQueue_periodic(),
-      _eventQueue_ISR(),
-      _gearDevice(_eventQueue_periodic, callback(this, &BikeSystem::onGearEvent)),
-      _pedalDevice(_eventQueue_periodic, callback(this, &BikeSystem::onPedalEvent)),
+      _ThreadISR(),
+      _eventQueuePeriodic(),
+      _eventQueueISR(),
+      _gearDevice(_eventQueuePeriodic, callback(this, &BikeSystem::onGearEvent)),
+      _pedalDevice(_eventQueuePeriodic, callback(this, &BikeSystem::onPedalEvent)),
       _resetDevice(callback(this, &BikeSystem::onReset)),
       _speedometer(_timer),
       _displayDevice(),
@@ -68,7 +69,7 @@ void BikeSystem::start() {
     auto startTime = _timer.elapsed_time();               // schedule the task to the event queue
     
     // Schedule the temperatureTask
-    Event<void()> temperatureTaskEvent(&_eventQueue_periodic,
+    Event<void()> temperatureTaskEvent(&_eventQueuePeriodic,
                                        callback(this, &BikeSystem::temperatureTask));
     temperatureTaskEvent.delay(kTemperatureTaskDelay);
     temperatureTaskEvent.period(kTemperatureTaskPeriod);
@@ -76,7 +77,7 @@ void BikeSystem::start() {
 
 
     // Schedule the displayTask
-    Event<void()> displayTaskEvent(&_eventQueue_periodic,
+    Event<void()> displayTaskEvent(&_eventQueuePeriodic,
                                     callback(this, &BikeSystem::displayTask));
     displayTaskEvent.delay(kDisplayTaskDelay);
     displayTaskEvent.period(kDisplayTaskPeriod);
@@ -84,20 +85,24 @@ void BikeSystem::start() {
 
     tr_info("All tasks posted");
 
-/*#if !MBED_TEST_MODE
+#if !MBED_TEST_MODE
     Event<void()> printStatsEvent(
-        &_eventQueue_periodic, callback(&_cpuLogger, &advembsof::CPULogger::printStats));
+        &_eventQueuePeriodic, callback(&_cpuLogger, &advembsof::CPULogger::printStats));
     printStatsEvent.delay(kMajorCycleDuration);
     printStatsEvent.period(kMajorCycleDuration);
     printStatsEvent.post();
-#endif*/
+#endif
 
-    _eventQueue_periodic.dispatch_forever();
+
+    _ThreadISR.start(callback(&_eventQueueISR, &EventQueue::dispatch_forever));
+    _eventQueuePeriodic.dispatch_forever();
+    //code never gets bellow
+
 }
 
 void BikeSystem::stop() { 
     core_util_atomic_store_bool(&_stopFlag, true); 
-    _eventQueue_periodic.break_dispatch();
+    _eventQueuePeriodic.break_dispatch();
 }
 
 #if defined(MBED_TEST_MODE)
@@ -142,27 +147,17 @@ void BikeSystem::temperatureTask() {
     // no need to protect access to data members (single threaded)
     _currentTemperature = _sensorDevice.readTemperature();
 
-    //_taskLogger.logPeriodAndExecutionTime(
-    //    _timer, advembsof::TaskLogger::kTemperatureTaskIndex, taskStartTime);
+    _taskLogger.logPeriodAndExecutionTime(
+        _timer, advembsof::TaskLogger::kTemperatureTaskIndex, taskStartTime);
 }
 
 void BikeSystem::onReset() {
-    _eventQueue_ISR.call(callback(this, &BikeSystem::resetTask));
+    _resetTime = _timer.elapsed_time();
+    _eventQueueISR.call(callback(this, &BikeSystem::resetTask));
 }
 
 void BikeSystem::resetTask() {
-    auto taskStartTime = _timer.elapsed_time();
-
-    if (core_util_atomic_load_bool(&_resetFlag)) {
-        tr_info("Reset task: response time is %" PRIu64 " usecs",
-                (_timer.elapsed_time() - _resetTime).count());
-
-        core_util_atomic_store_bool(&_resetFlag, false);
-        _speedometer.reset();
-    }
-
-    _taskLogger.logPeriodAndExecutionTime(
-        _timer, advembsof::TaskLogger::kResetTaskIndex, taskStartTime);
+    _speedometer.reset();
 }
 
 void BikeSystem::displayTask() {
@@ -176,7 +171,7 @@ void BikeSystem::displayTask() {
     _displayDevice.displayDistance(_traveledDistance);
     _displayDevice.displayTemperature(_currentTemperature);
 
-    //_taskLogger.logPeriodAndExecutionTime(
-    //    _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
+    _taskLogger.logPeriodAndExecutionTime(
+        _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
 }
 }  // namespace static_scheduling_with_event
