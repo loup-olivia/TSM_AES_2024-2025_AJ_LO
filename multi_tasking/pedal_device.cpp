@@ -36,7 +36,8 @@
 
 namespace multi_tasking {
 
-PedalDevice::PedalDevice(EventQueue& eventQueue, mbed::Callback<void(uint8_t, uint8_t)> cb)
+PedalDevice::PedalDevice(EventQueue& eventQueue, 
+    mbed::Callback<void(const std::chrono::milliseconds&)> cb)
     : _eventQueue(eventQueue), _cb(cb) {
     // register the joystick event handler
     disco::Joystick::getInstance().setLeftCallback(

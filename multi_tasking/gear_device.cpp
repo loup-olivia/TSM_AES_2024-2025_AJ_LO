@@ -61,7 +61,8 @@ void GearDevice::onJoystickDown() {
     }
 }
 
-uint8_t GearDevice::getCurrentGear() { return core_util_atomic_load_u8(&_currentGear); }
+uint8_t GearDevice::getCurrentGear() { 
+    return core_util_atomic_load_u8(&_currentGear); }
 
 uint8_t GearDevice::getCurrentGearSize() const {
     return bike_computer::kMaxGearSize - core_util_atomic_load_u8(&_currentGear);

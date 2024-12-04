@@ -25,6 +25,7 @@
 #include "bike_system.hpp"
 
 #include <chrono>
+#include <cstdint>
 
 #include "Callback.h"
 #include "gear_device.hpp"
@@ -55,8 +56,8 @@ static constexpr std::chrono::milliseconds kMajorCycleDuration               = 1
 BikeSystem::BikeSystem()
     : _timer(),
       _eventQueue_periodic(),
-      _gearDevice(_eventQueue, callback(this, &BikeSystem::onGearChange)),
-      _pedalDevice(_eventQueue, callback(this, &BikeSystem::onSpeedChange)),
+      _gearDevice(_eventQueue_periodic, callback(this, &BikeSystem::onGearEvent)),
+      _pedalDevice(_eventQueue_periodic, callback(this, &BikeSystem::onPedalEvent)),
       _resetDevice(callback(this, &BikeSystem::onReset)),
       _speedometer(_timer),
       _displayDevice(),
@@ -71,41 +72,24 @@ void BikeSystem::start() {
 
     init();
 
-    EventQueue eventQueue;  // create the event queue
 
-    auto startTime = _timer.elapsed_time();
-
-    // Schedule the gearEvent task
-    Event<void()> gearEvent(
-        &eventQueue,
-        callback(this, &BikeSystem::gearTask));  // Create the event with callback on the
-                                                 // wanted function
-    gearEvent.delay(kGearTaskDelay);    // define the delay between two calls of the task
-    gearEvent.period(kGearTaskPeriod);  // define the period
-    gearEvent.post();                   // schedule the task to the event queue
+    auto startTime = _timer.elapsed_time();               // schedule the task to the event queue
     
-    // Schedule the speedDistance task
-    Event<void()> speedDistanceEvent(&eventQueue,
-                                     callback(this, &BikeSystem::speedDistanceTask));
-    speedDistanceEvent.delay(kSpeedDistanceTaskDelay);
-    speedDistanceEvent.period(kSpeedDistanceTaskPeriod);
-    speedDistanceEvent.post();
-
     // Schedule the temperatureTask
-    Event<void()> temperatureTaskEvent(&eventQueue,
+    Event<void()> temperatureTaskEvent(&_eventQueue_periodic,
                                        callback(this, &BikeSystem::temperatureTask));
     temperatureTaskEvent.delay(kTemperatureTaskDelay);
     temperatureTaskEvent.period(kTemperatureTaskPeriod);
     temperatureTaskEvent.post();
 
     // Schedule the resetTask
-    Event<void()> resetTaskEvent(&eventQueue, callback(this, &BikeSystem::resetTask));
+    Event<void()> resetTaskEvent(&_eventQueue_periodic, callback(this, &BikeSystem::resetTask));
     resetTaskEvent.delay(kResetTaskDelay);
     resetTaskEvent.period(kResetTaskPeriod);
     resetTaskEvent.post();
 
-    // Schedule the displayTask1
-    Event<void()> displayTaskEvent(&eventQueue,
+    // Schedule the displayTask
+    Event<void()> displayTaskEvent(&_eventQueue_periodic,
                                     callback(this, &BikeSystem::displayTask));
     displayTaskEvent.delay(kDisplayTaskDelay);
     displayTaskEvent.period(kDisplayTaskPeriod);
@@ -116,13 +100,13 @@ void BikeSystem::start() {
 
 #if !MBED_TEST_MODE
     Event<void()> printStatsEvent(
-        &eventQueue, callback(&_cpuLogger, &advembsof::CPULogger::printStats));
+        &_eventQueue_periodic, callback(&_cpuLogger, &advembsof::CPULogger::printStats));
     printStatsEvent.delay(kMajorCycleDuration);
     printStatsEvent.period(kMajorCycleDuration);
     printStatsEvent.post();
 #endif
 
-    eventQueue.dispatch_forever();
+    _eventQueue_periodic.dispatch_forever();
 }
 
 void BikeSystem::stop() { 
@@ -166,7 +150,11 @@ void BikeSystem::gearTask() {
         _timer, advembsof::TaskLogger::kGearTaskIndex, taskStartTime);
 }
 
-void BikeSystem::onGearChange(){
+void BikeSystem::onGearEvent(uint8_t gear, uint8_t gearSize){
+
+}
+
+void BikeSystem::onPedalEvent(const std::chrono::milliseconds& rotationTime){
 
 }
 
