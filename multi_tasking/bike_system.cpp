@@ -36,12 +36,6 @@
 
 namespace multi_tasking {
 
-static constexpr std::chrono::milliseconds kGearTaskPeriod                   = 800ms;
-static constexpr std::chrono::milliseconds kGearTaskDelay                    = 0ms;
-static constexpr std::chrono::milliseconds kGearTaskComputationTime          = 100ms;
-static constexpr std::chrono::milliseconds kSpeedDistanceTaskPeriod          = 400ms;
-static constexpr std::chrono::milliseconds kSpeedDistanceTaskDelay           = 0ms;
-static constexpr std::chrono::milliseconds kSpeedDistanceTaskComputationTime = 200ms;
 static constexpr std::chrono::milliseconds kDisplayTaskPeriod               = 1600ms;
 static constexpr std::chrono::milliseconds kDisplayTaskDelay                = 300ms;
 static constexpr std::chrono::milliseconds kDisplayTaskComputationTime      = 500ms;
@@ -110,8 +104,8 @@ void BikeSystem::start() {
 }
 
 void BikeSystem::stop() { 
-    //ajout d'un break dispatch à faire
     core_util_atomic_store_bool(&_stopFlag, true); 
+    _eventQueue_periodic.break_dispatch();
 }
 
 #if defined(MBED_TEST_MODE)
@@ -138,40 +132,16 @@ void BikeSystem::init() {
     _taskLogger.enable(true);
 }
 
-void BikeSystem::gearTask() {
-    // gear task
-    auto taskStartTime = _timer.elapsed_time();
-
-    // no need to protect access to data members (single threaded)
-    _currentGear     = _gearDevice.getCurrentGear();
-    _currentGearSize = _gearDevice.getCurrentGearSize();
-
-    _taskLogger.logPeriodAndExecutionTime(
-        _timer, advembsof::TaskLogger::kGearTaskIndex, taskStartTime);
-}
 
 void BikeSystem::onGearEvent(uint8_t gear, uint8_t gearSize){
-
+    _currentGear = gear;
+    _speedometer.setGearSize(gearSize);
 }
 
 void BikeSystem::onPedalEvent(const std::chrono::milliseconds& rotationTime){
-
+    _speedometer.setCurrentRotationTime(rotationTime);
 }
 
-void BikeSystem::speedDistanceTask() {
-    // speed and distance task
-    auto taskStartTime = _timer.elapsed_time();
-
-    const auto pedalRotationTime = _pedalDevice.getCurrentRotationTime();
-    _speedometer.setCurrentRotationTime(pedalRotationTime);
-    _speedometer.setGearSize(_currentGearSize);
-    // no need to protect access to data members (single threaded)
-    _currentSpeed     = _speedometer.getCurrentSpeed();
-    _traveledDistance = _speedometer.getDistance();
-
-    _taskLogger.logPeriodAndExecutionTime(
-        _timer, advembsof::TaskLogger::kSpeedTaskIndex, taskStartTime);
-}
 
 void BikeSystem::temperatureTask() {
     auto taskStartTime = _timer.elapsed_time();
