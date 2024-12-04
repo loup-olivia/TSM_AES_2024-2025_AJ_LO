@@ -84,21 +84,21 @@ void BikeSystem::start() {
     displayTaskEvent.post();
 
         // Memory logger task
-    /*Event<void()> memoryLoggerEvent(
+    Event<void()> memoryLoggerEvent(
         &_eventQueuePeriodic, callback(&_memoryLogger, &advembsof::MemoryLogger::printDiffs));
     memoryLoggerEvent.period(kMajorCycleDuration);
     memoryLoggerEvent.delay(kMajorCycleDuration);
-    memoryLoggerEvent.post();*/
+    memoryLoggerEvent.post();
 
     tr_info("All tasks posted");
 
-/*#if !MBED_TEST_MODE
+#if !MBED_TEST_MODE
     Event<void()> printStatsEvent(
         &_eventQueuePeriodic, callback(&_cpuLogger, &advembsof::CPULogger::printStats));
     printStatsEvent.delay(kMajorCycleDuration);
     printStatsEvent.period(kMajorCycleDuration);
     printStatsEvent.post();
-#endif*/
+#endif
     _ThreadISR.start(callback(&_eventQueueISR, &EventQueue::dispatch_forever));
 
     _memoryLogger.getAndPrintStatistics();
@@ -156,8 +156,8 @@ void BikeSystem::temperatureTask() {
     // no need to protect access to data members (single threaded)
     _currentTemperature = _sensorDevice.readTemperature();
 
-    //_taskLogger.logPeriodAndExecutionTime(
-    //    _timer, advembsof::TaskLogger::kTemperatureTaskIndex, taskStartTime);
+    _taskLogger.logPeriodAndExecutionTime(
+        _timer, advembsof::TaskLogger::kTemperatureTaskIndex, taskStartTime);
 }
 
 void BikeSystem::onReset() {
@@ -166,8 +166,8 @@ void BikeSystem::onReset() {
 }
 
 void BikeSystem::resetTask() {
-      tr_info("Reset task: response time is %" PRIu64 " usecs",
-                (_timer.elapsed_time() - _resetTime).count());
+      //tr_info("Reset task: response time is %" PRIu64 " usecs",
+      //          (_timer.elapsed_time() - _resetTime).count());
     _speedometer.reset();
 }
 
@@ -182,7 +182,7 @@ void BikeSystem::displayTask() {
     _displayDevice.displayDistance(_traveledDistance);
     _displayDevice.displayTemperature(_currentTemperature);
 
-   // _taskLogger.logPeriodAndExecutionTime(
-     //   _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
+    _taskLogger.logPeriodAndExecutionTime(
+        _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
 }
 }  // namespace static_scheduling_with_event

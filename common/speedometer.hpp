@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "Callback.h"
 #include "constants.hpp"
 #include "mbed.h"
 
@@ -48,6 +49,8 @@ class Speedometer {
     // method called for resetting the traveled distance
     void reset();
 
+    void setOnResetCallback(mbed::Callback<void()> cb);
+
     // methods used for tests only
 #if defined(MBED_TEST_MODE)
     uint8_t getGearSize() const;
@@ -55,6 +58,9 @@ class Speedometer {
     float getTraySize() const;
     std::chrono::milliseconds getCurrentPedalRotationTime() const;
     void setOnResetCallback(mbed::Callback<void()> callback);
+
+   private:
+    Callback<void()> _callback;
 #endif  // defined(MBED_TEST_MODE)
 
    private:
@@ -85,10 +91,6 @@ class Speedometer {
     uint8_t _gearSize    = 19;  // corresponds with min gear
 
     Thread _thread;
-
-#if defined(MBED_TEST_MODE)
-    mbed::Callback<void()> _cb;
-#endif
 };
 
 }  // namespace bike_computer

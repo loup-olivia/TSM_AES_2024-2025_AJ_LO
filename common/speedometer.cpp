@@ -101,7 +101,7 @@ std::chrono::milliseconds Speedometer::getCurrentPedalRotationTime() const {
     return _pedalRotationTime;
 }
 
-void Speedometer::setOnResetCallback(Callback<void()> callback) { _cb = callback; }
+void Speedometer::setOnResetCallback(Callback<void()> callback) { _callback = callback; }
 
 #endif  // defined(MBED_TEST_MODE)
 
