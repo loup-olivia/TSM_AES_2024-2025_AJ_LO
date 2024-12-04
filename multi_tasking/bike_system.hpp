@@ -58,8 +58,11 @@ class BikeSystem {
     // method called for stopping the system
     void stop();
 
+    void onReset();
+
 #if defined(MBED_TEST_MODE)
     const advembsof::TaskLogger& getTaskLogger();
+    bike_computer::Speedometer &getSpeedometer();
 #endif  // defined(MBED_TEST_MODE)
 
    private:
@@ -69,7 +72,7 @@ class BikeSystem {
     void resetTask();
     void displayTask();
 
-    void onReset();
+    
     void onPedalEvent(const std::chrono::milliseconds& rotationTime);
     void onGearEvent(uint8_t gear, uint8_t gearSize);
     

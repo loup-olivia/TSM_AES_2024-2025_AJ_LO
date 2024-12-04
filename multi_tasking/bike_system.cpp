@@ -115,7 +115,7 @@ void BikeSystem::stop() {
 }
 
 #if defined(MBED_TEST_MODE)
-//const advembsof::TaskLogger& BikeSystem::getTaskLogger() { return _taskLogger; }
+const advembsof::TaskLogger& BikeSystem::getTaskLogger() { return _taskLogger; }
 #endif  // defined(MBED_TEST_MODE)
 
 void BikeSystem::init() {
@@ -166,8 +166,12 @@ void BikeSystem::onReset() {
 }
 
 void BikeSystem::resetTask() {
-      //tr_info("Reset task: response time is %" PRIu64 " usecs",
-      //          (_timer.elapsed_time() - _resetTime).count());
+    
+    //disable logging in test mode
+      #if !MBED_TEST_MODE 
+      tr_info("Reset task: response time is %" PRIu64 " usecs",
+                (_timer.elapsed_time() - _resetTime).count());
+      #endif
     _speedometer.reset();
 }
 
