@@ -72,12 +72,11 @@ class BikeSystem {
     void onReset();
     void onPedalEvent(const std::chrono::milliseconds& rotationTime);
     void onGearEvent(uint8_t gear, uint8_t gearSize);
-
+    
     EventQueue _eventQueuePeriodic; //used for periodic and datadriven events
     EventQueue _eventQueueISR; //used for ISRs
 
     Thread _ThreadISR;
-
     // stop flag, used for stopping the super-loop (set in stop())
     bool _stopFlag = false;
     // timer instance used for loggint task time and used by ResetDevice

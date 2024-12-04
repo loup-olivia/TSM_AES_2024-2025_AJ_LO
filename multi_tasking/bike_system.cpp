@@ -46,7 +46,7 @@ static constexpr std::chrono::milliseconds kMajorCycleDuration               = 1
 
 BikeSystem::BikeSystem()
     : _timer(),
-      _ThreadISR(),
+      _ThreadISR(osPriorityNormal, OS_STACK_SIZE, nullptr, "deferredISRThread"),
       _eventQueuePeriodic(),
       _eventQueueISR(),
       _gearDevice(_eventQueuePeriodic, callback(this, &BikeSystem::onGearEvent)),
@@ -83,6 +83,13 @@ void BikeSystem::start() {
     displayTaskEvent.period(kDisplayTaskPeriod);
     displayTaskEvent.post();
 
+        // Memory logger task
+    Event<void()> memoryLoggerEvent(
+        &_eventQueuePeriodic, callback(&_memoryLogger, &advembsof::MemoryLogger::printDiffs));
+    memoryLoggerEvent.period(kMajorCycleDuration);
+    memoryLoggerEvent.delay(kMajorCycleDuration);
+    memoryLoggerEvent.post();
+
     tr_info("All tasks posted");
 
 #if !MBED_TEST_MODE
@@ -93,7 +100,7 @@ void BikeSystem::start() {
     printStatsEvent.post();
 #endif
 
-
+    _memoryLogger.getAndPrintStatistics();
     _ThreadISR.start(callback(&_eventQueueISR, &EventQueue::dispatch_forever));
     _eventQueuePeriodic.dispatch_forever();
     //code never gets bellow
