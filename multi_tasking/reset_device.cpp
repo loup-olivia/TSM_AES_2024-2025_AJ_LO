@@ -21,9 +21,6 @@
  * @date 2023-08-20
  * @version 1.0.0
  ***************************************************************************/
-
-#pragma once
-
 #include "reset_device.hpp"
 
 #include <chrono>

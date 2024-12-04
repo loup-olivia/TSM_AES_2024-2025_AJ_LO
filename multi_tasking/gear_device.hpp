@@ -43,9 +43,18 @@ class GearDevice {
     uint8_t getCurrentGearSize() const;
 
    private:
+    void postEvent();
+
+#if defined(MBED_TEST_MODE)
+    public:
     void onJoystickUp();
     void onJoystickDown();
-    void postEvent();
+#else 
+    private : 
+    void onJoystickUp();
+    void onJoystickDown();
+#endif  // defined(MBED_TEST_MODE)
+    
 
     // data members
     uint8_t _currentGear = bike_computer::kMinGear;

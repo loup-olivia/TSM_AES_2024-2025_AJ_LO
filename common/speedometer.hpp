@@ -49,7 +49,7 @@ class Speedometer {
     // method called for resetting the traveled distance
     void reset();
 
-    void setOnResetCallback(mbed::Callback<void()> cb);
+    
 
     // methods used for tests only
 #if defined(MBED_TEST_MODE)

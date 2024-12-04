@@ -62,7 +62,9 @@ class BikeSystem {
 
 #if defined(MBED_TEST_MODE)
     const advembsof::TaskLogger& getTaskLogger();
-    bike_computer::Speedometer &getSpeedometer();
+    uint8_t getCurrentGear();
+    GearDevice& getGearDevice();
+    bike_computer::Speedometer& getSpeedometer();
 #endif  // defined(MBED_TEST_MODE)
 
    private:

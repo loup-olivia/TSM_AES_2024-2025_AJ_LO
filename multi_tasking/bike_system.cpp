@@ -38,10 +38,8 @@ namespace multi_tasking {
 
 static constexpr std::chrono::milliseconds kDisplayTaskPeriod               = 1600ms;
 static constexpr std::chrono::milliseconds kDisplayTaskDelay                = 300ms;
-static constexpr std::chrono::milliseconds kDisplayTaskComputationTime      = 500ms;
 static constexpr std::chrono::milliseconds kTemperatureTaskPeriod            = 1600ms;
 static constexpr std::chrono::milliseconds kTemperatureTaskDelay             = 1100ms;
-static constexpr std::chrono::milliseconds kTemperatureTaskComputationTime   = 100ms;
 static constexpr std::chrono::milliseconds kMajorCycleDuration               = 1600ms;
 
 BikeSystem::BikeSystem()
@@ -166,7 +164,7 @@ void BikeSystem::onReset() {
 }
 
 void BikeSystem::resetTask() {
-    
+
     //disable logging in test mode
       #if !MBED_TEST_MODE 
       tr_info("Reset task: response time is %" PRIu64 " usecs",
@@ -189,4 +187,12 @@ void BikeSystem::displayTask() {
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
 }
+
+#if defined(MBED_TEST_MODE)
+GearDevice& BikeSystem::getGearDevice() { return _gearDevice; }
+uint8_t BikeSystem::getCurrentGear() { return _currentGear; }
+bike_computer::Speedometer& BikeSystem::getSpeedometer() { return _speedometer; }
+#endif  // defined(MBED_TEST_MODE)
+
+
 }  // namespace static_scheduling_with_event

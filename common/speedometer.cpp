@@ -79,8 +79,8 @@ float Speedometer::getDistance() {
 
 void Speedometer::reset() {
 #if defined(MBED_TEST_MODE)
-    if (_cb) {
-        _cb();
+    if (_callback) {
+        _callback();
     }
 #endif  // defined(MBED_TEST_MODE)
     _totalDistanceMutex.lock();
