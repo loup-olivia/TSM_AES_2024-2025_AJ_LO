@@ -31,8 +31,9 @@ namespace multi_tasking {
 
 class PedalDevice {
    public:
-    PedalDevice();  // NOLINT(runtime/references)
-
+    PedalDevice(EventQueue& eventQueue, 
+    mbed::Callback<void(const std::chrono::milliseconds&)> cb);
+    
     // make the class non copyable
     PedalDevice(PedalDevice&)            = delete;
     PedalDevice& operator=(PedalDevice&) = delete;
@@ -46,6 +47,13 @@ class PedalDevice {
     // private methods
     void increaseRotationSpeed();
     void decreaseRotationSpeed();
+    void postEvent();
+
+    // Eventqueue
+    EventQueue& _eventQueue;
+    
+    // Callbacks
+    mbed::Callback<void(const std::chrono::milliseconds&)> _cb;
 
     volatile uint32_t _currentStep = static_cast<uint32_t>(
         (bike_computer::kInitialPedalRotationTime - bike_computer::kMinPedalRotationTime)

@@ -115,7 +115,6 @@ void Speedometer::computeSpeed() {
 
     float gearRatio   = static_cast<float>(kTraySize) / static_cast<float>(_gearSize);
     float distPerTurn = kWheelCircumference * gearRatio;
-
     _currentSpeed =
         distPerTurn * 3600.0f /
         std::chrono::duration_cast<std::chrono::milliseconds>(_pedalRotationTime).count();

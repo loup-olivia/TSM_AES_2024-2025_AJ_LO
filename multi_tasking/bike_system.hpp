@@ -25,10 +25,12 @@
 #pragma once
 
 // from advembsof
+#include "EventQueue.h"
 #include "Timer.h"
 #include "cpu_logger.hpp"
 #include "display_device.hpp"
 #include "task_logger.hpp"
+#include "memory_logger.hpp"
 
 // from common
 #include "sensor_device.hpp"
@@ -63,15 +65,18 @@ class BikeSystem {
    private:
     // private methods
     void init();
-    void gearTask();
-    void speedDistanceTask();
     void temperatureTask();
     void resetTask();
-    void displayTask1();
-    void displayTask2();
+    void displayTask();
 
     void onReset();
+    void onPedalEvent(const std::chrono::milliseconds& rotationTime);
+    void onGearEvent(uint8_t gear, uint8_t gearSize);
+    
+    EventQueue _eventQueuePeriodic; //used for periodic and datadriven events
+    EventQueue _eventQueueISR; //used for ISRs
 
+    Thread _ThreadISR;
     // stop flag, used for stopping the super-loop (set in stop())
     bool _stopFlag = false;
     // timer instance used for loggint task time and used by ResetDevice
@@ -100,6 +105,9 @@ class BikeSystem {
 
     // used for logging cpu usage
     advembsof::CPULogger _cpuLogger;
+
+    //Adding a memory logger instance
+    advembsof::MemoryLogger _memoryLogger;
 
     // used to register the occurence of the reset
     std::chrono::microseconds _resetTime = std::chrono::microseconds::zero();
