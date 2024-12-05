@@ -49,8 +49,6 @@ class Speedometer {
     // method called for resetting the traveled distance
     void reset();
 
-    
-
     // methods used for tests only
 #if defined(MBED_TEST_MODE)
     uint8_t getGearSize() const;

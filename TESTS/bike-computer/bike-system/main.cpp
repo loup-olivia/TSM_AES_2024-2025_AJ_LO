@@ -22,6 +22,7 @@
  * @version 0.1.0
  ***************************************************************************/
 
+#include <cassert>
 #include <chrono>
 #include <cstdint>
 
@@ -29,9 +30,9 @@
 #include "gear_device.hpp"
 #include "greentea-client/test_env.h"
 #include "mbed.h"
+#include "multi_tasking/bike_system.hpp"
 #include "static_scheduling/bike_system.hpp"
 #include "static_scheduling_with_event/bike_system.hpp"
-#include "multi_tasking/bike_system.hpp"
 #include "task_logger.hpp"
 #include "unity/unity.h"
 #include "utest/utest.h"
@@ -147,10 +148,6 @@ static void test_bike_system_with_event() {
     }
 }
 
-void mockGearCallback(uint8_t oldGear, uint8_t newGear) {
-    printf("Gear changed from %d to %d\n", oldGear, newGear);
-}
-
 // test_multi_tasking_bike_system handler function
 static void test_multi_tasking_bike_system() {
     // create the BikeSystem instance
@@ -174,7 +171,7 @@ static void test_multi_tasking_bike_system() {
         800000us, 400000us, 1600000us, 800000us, 1600000us, 1600000us};
 
     // allow for 2 msecs offset (with EventQueue)
-    constexpr uint64_t kDeltaUs = 20000; //modified to fit test
+    constexpr uint64_t kDeltaUs = 20000;  // modified to fit test
     TEST_ASSERT_UINT64_WITHIN(
         kDeltaUs,
         taskPeriods[advembsof::TaskLogger::kTemperatureTaskIndex].count(),
@@ -187,11 +184,9 @@ static void test_multi_tasking_bike_system() {
         bikeSystem.getTaskLogger()
             .getPeriod(advembsof::TaskLogger::kDisplayTask1Index)
             .count());
-
 }
 
-static void test_gear_multi_tasking_bike_system(){
-
+static void test_gear_multi_tasking_bike_system() {
     // create the BikeSystem instance
     multi_tasking::BikeSystem bikeSystem;
 
@@ -202,38 +197,55 @@ static void test_gear_multi_tasking_bike_system(){
     // let the bike system run for 2 secs
     ThisThread::sleep_for(2s);
 
-    // test reset on BikeSystem
-    bikeSystem.getSpeedometer().setOnResetCallback(resetCallback);
-
-    multi_tasking::GearDevice& gearDevice = bikeSystem.getGearDevice(); 
+    multi_tasking::GearDevice& gearDevice = bikeSystem.getGearDevice();
 
     // check for gear up
-    constexpr uint8_t kNbrOfGearUp            = 10;
-    for (uint8_t i = 0; i < kNbrOfGearUp; i++) {
+    constexpr uint8_t kNbrOfGearChange = 9;
+    uint8_t nbrOfRightIncr             = 0;
+    uint8_t nbrOfRightDecr             = 0;
+    for (uint8_t i = 0; i < kNbrOfGearChange; i++) {
         uint8_t actualGear = bikeSystem.getCurrentGear();
-        printf("actualGear : %d", actualGear);
         gearDevice.onJoystickUp();
+        ThisThread::sleep_for(20ms);  // waiting for update of the task
 
+        uint8_t newGear = bikeSystem.getCurrentGear();
 
+        if ((actualGear + 1) == newGear) {
+            nbrOfRightIncr++;
+        }
 
+        printf("New Gear : %d \n", newGear);
+        printf("Actual Gear : %d\n", actualGear);
     }
-        // let the bike system run for 2 secs
-        ThisThread::sleep_for(2s);
-    
-    //check for gear down
+
+    for (uint8_t i = 0; i < kNbrOfGearChange; i++) {
+        uint8_t actualGear = bikeSystem.getCurrentGear();
+        gearDevice.onJoystickDown();
+        ThisThread::sleep_for(20ms);  // waiting for update of the task
+
+        uint8_t newGear = bikeSystem.getCurrentGear();
+
+        if ((actualGear - 1) == newGear) {
+            nbrOfRightDecr++;
+        }
+
+        printf("New Gear : %d \n", newGear);
+        printf("Actual Gear : %d\n", actualGear);
+    }
+    printf("number of gear down %d \n", nbrOfRightDecr);
+    TEST_ASSERT_TRUE((nbrOfRightIncr + 1 == kNbrOfGearChange) &&
+                     (nbrOfRightDecr + 1 == kNbrOfGearChange))
+    // let the bike system run for 2 secs
+    ThisThread::sleep_for(2s);
+
+    // check for gear down
     constexpr uint8_t kNbrOfGearDown = 10;
     for (uint8_t i = 0; i < kNbrOfGearDown; i++) {
-
-
     }
-            
 
     // stop the bike system
     bikeSystem.stop();
-
 }
-
-
 
 // test_reset_multi_tasking_bike_system handler function
 Timer timer;
@@ -311,16 +323,13 @@ static utest::v1::status_t greentea_setup(const size_t number_of_cases) {
 
 // List of test cases in this file
 static Case cases[] = {
-    //Case("test bike system", test_bike_system),
-    //Case("test bike system with event queue", test_bike_system_event_queue),
-    //Case("test bike system with event", test_bike_system_with_event),
-    //Case("test bike system multi tasking", test_multi_tasking_bike_system),
-    //Case("test bike system reset multi tasking", test_reset_multi_tasking_bike_system)
-      Case("test bike system gear multi tasking", test_gear_multi_tasking_bike_system)  
-    };
+    Case("test bike system", test_bike_system),
+    Case("test bike system with event queue", test_bike_system_event_queue),
+    Case("test bike system with event", test_bike_system_with_event),
+    Case("test bike system multi tasking", test_multi_tasking_bike_system),
+    Case("test bike system reset multi tasking", test_reset_multi_tasking_bike_system),
+    Case("test bike system gear multi tasking", test_gear_multi_tasking_bike_system)};
 
 static Specification specification(greentea_setup, cases);
 
 int main() { return !Harness::run(specification); }
-
-
