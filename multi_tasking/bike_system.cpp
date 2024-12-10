@@ -81,6 +81,11 @@ void BikeSystem::start() {
     displayTaskEvent.period(kDisplayTaskPeriod);
     displayTaskEvent.post();
 
+
+    tr_info("All tasks posted");
+
+
+    #if !MBED_TEST_MODE
         // Memory logger task
     Event<void()> memoryLoggerEvent(
         &_eventQueuePeriodic, callback(&_memoryLogger, &advembsof::MemoryLogger::printDiffs));
@@ -88,19 +93,22 @@ void BikeSystem::start() {
     memoryLoggerEvent.delay(kMajorCycleDuration);
     memoryLoggerEvent.post();
 
-    tr_info("All tasks posted");
 
-#if !MBED_TEST_MODE
+
     Event<void()> printStatsEvent(
         &_eventQueuePeriodic, callback(&_cpuLogger, &advembsof::CPULogger::printStats));
     printStatsEvent.delay(kMajorCycleDuration);
     printStatsEvent.period(kMajorCycleDuration);
     printStatsEvent.post();
-#endif
-    _ThreadISR.start(callback(&_eventQueueISR, &EventQueue::dispatch_forever));
+    #endif
 
+
+    _ThreadISR.start(callback(&_eventQueueISR, &EventQueue::dispatch_forever));
+    
+    #if !MBED_TEST_MODE
     _memoryLogger.getAndPrintStatistics();
     _memoryLogger.printDiffs();
+    #endif
 
     _eventQueuePeriodic.dispatch_forever();
     //code never gets bellow
@@ -153,7 +161,6 @@ void BikeSystem::temperatureTask() {
 
     // no need to protect access to data members (single threaded)
     _currentTemperature = _sensorDevice.readTemperature();
-
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kTemperatureTaskIndex, taskStartTime);
 }
@@ -184,6 +191,7 @@ void BikeSystem::displayTask() {
     _displayDevice.displayDistance(_traveledDistance);
     _displayDevice.displayTemperature(_currentTemperature);
 
+    
     _taskLogger.logPeriodAndExecutionTime(
         _timer, advembsof::TaskLogger::kDisplayTask1Index, taskStartTime);
 }
