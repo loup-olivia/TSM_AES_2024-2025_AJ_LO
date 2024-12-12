@@ -22,8 +22,10 @@
         "platform.stack-stats-enabled": true
       },
       "DISCO_H747I": {
+        "target.app_offset": "0x20000",  
         "mbed-trace.enable": true,
-        "mbed-trace.max-level": "TRACE_LEVEL_DEBUG"   
+        "mbed-trace.max-level": "TRACE_LEVEL_DEBUG",
+        "target.bootloader_img":"/home/jojo/Mbed Programs/mbed-os-bootloader/BUILD/DISCO_H747I/ARMC6/mbed-os-bootloader.bin"  
       }
     }
   }
