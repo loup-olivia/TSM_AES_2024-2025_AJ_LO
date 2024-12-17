@@ -59,7 +59,7 @@ BikeSystem::BikeSystem()
       //comme dans le codelab multi-tasking ajouter aussi un printDiff()
 
 void BikeSystem::start() {
-    tr_info("Starting Super-Loop with event handling");
+    tr_info("Starting Super-Loop with event handling and multi-tasking");
 
     init();
 
