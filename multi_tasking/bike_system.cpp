@@ -43,15 +43,17 @@ static constexpr std::chrono::milliseconds kTemperatureTaskDelay             = 1
 static constexpr std::chrono::milliseconds kMajorCycleDuration               = 1600ms;
 
 BikeSystem::BikeSystem()
-    : _timer(),
-      _ThreadISR(osPriorityBelowNormal, OS_STACK_SIZE, nullptr, "ISRThread"),
+    :
       _eventQueuePeriodic(),
       _eventQueueISR(),
+      _ThreadISR(osPriorityBelowNormal, OS_STACK_SIZE, nullptr, "ISRThread"), 
+      _timer(),
       _gearDevice(_eventQueuePeriodic, callback(this, &BikeSystem::onGearEvent)),
       _pedalDevice(_eventQueuePeriodic, callback(this, &BikeSystem::onPedalEvent)),
       _resetDevice(callback(this, &BikeSystem::onReset)),
-      _speedometer(_timer),
       _displayDevice(),
+      _speedometer(_timer),
+      _sensorDevice(),
       _taskLogger(),
       _cpuLogger(_timer) {}
 
