@@ -104,7 +104,8 @@ void BikeSystem::start() {
 
 
     _ThreadISR.start(callback(&_eventQueueISR, &EventQueue::dispatch_forever));
-    
+
+   
     #if !MBED_TEST_MODE
     _memoryLogger.getAndPrintStatistics();
     _memoryLogger.printDiffs();
