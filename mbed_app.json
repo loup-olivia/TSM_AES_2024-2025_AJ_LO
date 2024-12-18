@@ -1,6 +1,8 @@
 {
     "macros": [
-      "MBED_CONF_MBED_TRACE_FEA_IPV6=0"
+      "MBED_CONF_MBED_TRACE_FEA_IPV6=0",
+      "MBED_BOOTLOADER_FLASH_BANK_SIZE=MBED_ROM_SIZE/2",
+      "USE_USB_SERIAL_UC=1"
     ],
     "config": {
       "main-stack-size": {
@@ -19,7 +21,11 @@
         "platform.minimal-printf-set-floating-point-max-decimals": 2,
         "platform.all-stats-enabled": true,
         "platform.heap-stats-enabled": true,
-        "platform.stack-stats-enabled": true
+        "platform.stack-stats-enabled": true,
+        "update-client.storage-address": "(MBED_BOOTLOADER_FLASH_BANK_SIZE)",
+        "update-client.storage-size": "(MBED_BOOTLOADER_FLASH_BANK_SIZE)",
+        "update-client.storage-locations": 1 
+
       },
       "DISCO_H747I": {
         "target.header_offset": "0x20000",  
