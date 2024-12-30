@@ -57,6 +57,7 @@ class BikeSystem {
     void stop();
 
 #if defined(MBED_TEST_MODE)
+    // cppcheck-suppress[unmatchedSuppression]
     const advembsof::TaskLogger& getTaskLogger();
 #endif  // defined(MBED_TEST_MODE)
 
@@ -71,8 +72,8 @@ class BikeSystem {
     void displayTask2();
 
     void onReset();
-
-    // stop flag, used for stopping the super-loop (set in stop())
+    // EventQueue _eventQueue_ISR;
+    //  stop flag, used for stopping the super-loop (set in stop())
     bool _stopFlag = false;
     // timer instance used for loggint task time and used by ResetDevice
     Timer _timer;

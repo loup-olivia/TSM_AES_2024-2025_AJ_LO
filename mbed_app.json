@@ -23,7 +23,9 @@
       },
       "DISCO_H747I": {
         "mbed-trace.enable": true,
-        "mbed-trace.max-level": "TRACE_LEVEL_DEBUG"   
+        "mbed-trace.max-level": "TRACE_LEVEL_DEBUG" ,
+        "target.header_offset": "0x20000",
+        "target.bootloader_img":"C:/Users/olivi/master/embSoft/mbed-os-bootloader/mbed-os-bootloader/BUILD/DISCO_H747I/ARMC6/mbed-os-bootloader.bin"  
       }
     }
   }
