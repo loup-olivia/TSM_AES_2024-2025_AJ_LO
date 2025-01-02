@@ -24,14 +24,15 @@
         "platform.stack-stats-enabled": true,
         "update-client.storage-address": "(MBED_BOOTLOADER_FLASH_BANK_SIZE)",
         "update-client.storage-size": "(MBED_BOOTLOADER_FLASH_BANK_SIZE)",
-        "update-client.storage-locations": 1 
+        "update-client.storage-locations": 2
 
       },
       "DISCO_H747I": {
         "target.header_offset": "0x20000",  
         "mbed-trace.enable": true,
         "mbed-trace.max-level": "TRACE_LEVEL_DEBUG",
-        "target.bootloader_img":"/home/jojo/Mbed Programs/mbed-os-bootloader/BUILD/DISCO_H747I/ARMC6/mbed-os-bootloader.bin"  
+        "target.bootloader_img":"./mbed-os-bootloader/mbed-os-bootloader.bin"  
       }
     }
   }
+  
