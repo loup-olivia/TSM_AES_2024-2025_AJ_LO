@@ -1,4 +1,4 @@
-    # AdvEmbSoft : Bike-computer 
+# AdvEmbSoft : Bike-computer 
 ## Student
 - Amez-Droz Jonathan
 - Loup Olivia
@@ -81,7 +81,6 @@ For a safety feature like a reset button, it's very important to have it even-dr
 
 # Part 3
 
-Command used for mbed testing
 
 ### Question 1
 The thread priority can be modified at creation time using 
