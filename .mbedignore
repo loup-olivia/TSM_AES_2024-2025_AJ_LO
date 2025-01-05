@@ -15,5 +15,6 @@ mbed-os/features/frameworks/mbed-client-cli/*
 mbed-os/features/frameworks/COMPONENT_FPGA_CI_TEST_SHIELD/*
 mbed-os/platform/randlib/*
 mbed-os/storage/kvstore/*
+mbed-os-bootloader/*
 
 #static_scheduling/bike_system.*
