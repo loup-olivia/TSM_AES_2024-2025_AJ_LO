@@ -73,8 +73,10 @@ class Speedometer {
 
     // constants related to speed computation
 
+    //
+    // cppcheck-suppress unusedStructMember
     static constexpr float kWheelCircumference = 2.1f;
-
+    // cppcheck-suppress unusedStructMember
     static constexpr uint8_t kTraySize           = 50;
     std::chrono::microseconds _lastTime          = std::chrono::microseconds::zero();
     std::chrono::milliseconds _pedalRotationTime = kInitialPedalRotationTime;
