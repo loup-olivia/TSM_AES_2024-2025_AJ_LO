@@ -43,15 +43,17 @@ static constexpr std::chrono::milliseconds kTemperatureTaskDelay             = 1
 static constexpr std::chrono::milliseconds kMajorCycleDuration               = 1600ms;
 
 BikeSystem::BikeSystem()
-    : _timer(),
-      _ThreadISR(osPriorityBelowNormal, OS_STACK_SIZE, nullptr, "ISRThread"),
+    :
       _eventQueuePeriodic(),
       _eventQueueISR(),
+      _ThreadISR(osPriorityBelowNormal, OS_STACK_SIZE, nullptr, "ISRThread"), 
+      _timer(),
       _gearDevice(_eventQueuePeriodic, callback(this, &BikeSystem::onGearEvent)),
       _pedalDevice(_eventQueuePeriodic, callback(this, &BikeSystem::onPedalEvent)),
       _resetDevice(callback(this, &BikeSystem::onReset)),
-      _speedometer(_timer),
       _displayDevice(),
+      _speedometer(_timer),
+      _sensorDevice(),
       _taskLogger(),
       _cpuLogger(_timer) {}
 
@@ -59,7 +61,7 @@ BikeSystem::BikeSystem()
       //comme dans le codelab multi-tasking ajouter aussi un printDiff()
 
 void BikeSystem::start() {
-    tr_info("Starting Super-Loop with event handling");
+    tr_info("Starting Super-Loop with event handling and multi-tasking");
 
     init();
 
@@ -104,7 +106,8 @@ void BikeSystem::start() {
 
 
     _ThreadISR.start(callback(&_eventQueueISR, &EventQueue::dispatch_forever));
-    
+
+   
     #if !MBED_TEST_MODE
     _memoryLogger.getAndPrintStatistics();
     _memoryLogger.printDiffs();

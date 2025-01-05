@@ -5,6 +5,7 @@
 
 #include <ctime>
 
+#include "FlashIAPBlockDevice.h"
 #include "common/constants.hpp"
 #include "mbed-os/mbed.h"
 #include "mbed-trace/mbed_trace.h"
@@ -12,6 +13,7 @@
 #include "multi_tasking/bike_system.hpp"
 #include "static_scheduling/bike_system.hpp"
 #include "static_scheduling_with_event/bike_system.hpp"
+#include "update-client/usb_serial_uc.hpp"
 
 //  Blinking rate in milliseconds
 #define BLINKING_RATE 500ms
@@ -37,6 +39,17 @@ int main() {
 #if defined(MBED_CONF_MBED_TRACE_ENABLE)
     mbed_trace_init();
 #endif
+#if (USE_USB_SERIAL_UC == 1) && defined(HEADER_ADDR)
+    FlashIAPBlockDevice flashIAPBlockDevice(MBED_ROM_START, MBED_ROM_SIZE);
+    update_client::USBSerialUC usbSerialUpdateClient(flashIAPBlockDevice);
+    update_client::UCErrorCode rc = usbSerialUpdateClient.start();
+
+    if (rc != update_client::UCErrorCode::UC_ERR_NONE) {
+        tr_error("Cannot initialize update client: %d", rc);
+    } else {
+        tr_info("Update client started");
+    }
+#endif
 
     while (true) {
         // static_scheduling::BikeSystem bikeSystem;
@@ -45,8 +58,8 @@ int main() {
 
         bike_system_multi_tasking.start();
         // bikeSystem_with_event.start();
-        //  bikeSystem.start();
-        //   bikeSystem.startWithEventQueue();
+        // bikeSystem.start();
+        // bikeSystem.startWithEventQueue();
     }
 }
 #endif

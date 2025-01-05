@@ -59,8 +59,9 @@ BikeSystem::BikeSystem()
       _gearDevice(),
       _pedalDevice(),
       _resetDevice(callback(this, &BikeSystem::onReset)),
-      _speedometer(_timer),
       _displayDevice(),
+      _speedometer(_timer),
+      _sensorDevice(),
       _taskLogger(),
       _cpuLogger(_timer) {}
 

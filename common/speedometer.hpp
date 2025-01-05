@@ -72,7 +72,8 @@ class Speedometer {
     static constexpr std::chrono::microseconds kTaskRunTime = 200000us;
 
     // constants related to speed computation
-    // cppcheck error : say unused but used in speedometer.cpp
+
+    //
     // cppcheck-suppress unusedStructMember
     static constexpr float kWheelCircumference = 2.1f;
     // cppcheck-suppress unusedStructMember
