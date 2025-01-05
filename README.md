@@ -77,3 +77,33 @@ Without events, the reset tasks takes 1us to respond. But the downside is that y
 ![image](https://github.com/user-attachments/assets/ea48e775-f115-4762-aa06-b2187c68d888)
 
 For a safety feature like a reset button, it's very important to have it even-drivent. This ensures that the reset can happen anytime.
+
+
+# Part 3
+
+
+### Question 1
+The thread priority can be modified at creation time using 
+```C++
+_ISRThread(osPriorityNormal, OS_STACK_SIZE, nullptr, "deferredISRThread");
+```
+Test with different priorities and observe the behaviors and response time for each case.
+1. osPriorityNormal
+ - Response time : 15-16usec, very few spikes above 100usec
+2. osPriorityBelowNormal
+ - Response time : 15-16usec, sometimes spikes above 100usec
+3. osPriorityAboveNormal
+ - Response time : 15-16usec
+
+ The response time can change because it's possible that other threads with higher priorities
+ are busy at reset execution. If the reset task is crucial it is important to set its 
+ priority above normal.
+
+ In our case 4 threads are running on the microcontroller.
+- main thread, priority = 24
+- rtx_idle thread, priority = 1
+- rtx_timer thread, priority = 40
+- ISR thread, priority = 32 (above normal) & 16 (below normal)
+
+Therefor, if the priority is bellow normal, the reset thread might have to wait
+on three different thread to accompish its task.

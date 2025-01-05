@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "Callback.h"
 #include "constants.hpp"
 #include "mbed.h"
 
@@ -55,6 +56,9 @@ class Speedometer {
     float getTraySize() const;
     std::chrono::milliseconds getCurrentPedalRotationTime() const;
     void setOnResetCallback(mbed::Callback<void()> callback);
+
+   private:
+    Callback<void()> _callback;
 #endif  // defined(MBED_TEST_MODE)
 
    private:
@@ -68,7 +72,8 @@ class Speedometer {
     static constexpr std::chrono::microseconds kTaskRunTime = 200000us;
 
     // constants related to speed computation
-    // cppcheck error : say unused but used in speedometer.cpp
+
+    //
     // cppcheck-suppress unusedStructMember
     static constexpr float kWheelCircumference = 2.1f;
     // cppcheck-suppress unusedStructMember
@@ -82,13 +87,9 @@ class Speedometer {
     float _currentSpeed = 0.0f;
     Mutex _totalDistanceMutex;
     float _totalDistance = 0.0f;
-    uint8_t _gearSize    = 1;
+    uint8_t _gearSize    = 19;  // corresponds with min gear
 
     Thread _thread;
-
-#if defined(MBED_TEST_MODE)
-    mbed::Callback<void()> _cb;
-#endif
 };
 
 }  // namespace bike_computer

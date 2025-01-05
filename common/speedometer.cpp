@@ -79,8 +79,8 @@ float Speedometer::getDistance() {
 
 void Speedometer::reset() {
 #if defined(MBED_TEST_MODE)
-    if (_cb) {
-        _cb();
+    if (_callback) {
+        _callback();
     }
 #endif  // defined(MBED_TEST_MODE)
     _totalDistanceMutex.lock();
@@ -101,7 +101,7 @@ std::chrono::milliseconds Speedometer::getCurrentPedalRotationTime() const {
     return _pedalRotationTime;
 }
 
-void Speedometer::setOnResetCallback(Callback<void()> callback) { _cb = callback; }
+void Speedometer::setOnResetCallback(Callback<void()> callback) { _callback = callback; }
 
 #endif  // defined(MBED_TEST_MODE)
 
@@ -115,7 +115,6 @@ void Speedometer::computeSpeed() {
 
     float gearRatio   = static_cast<float>(kTraySize) / static_cast<float>(_gearSize);
     float distPerTurn = kWheelCircumference * gearRatio;
-
     _currentSpeed =
         distPerTurn * 3600.0f /
         std::chrono::duration_cast<std::chrono::milliseconds>(_pedalRotationTime).count();

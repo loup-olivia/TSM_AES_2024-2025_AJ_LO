@@ -21,9 +21,6 @@
  * @date 2023-08-20
  * @version 1.0.0
  ***************************************************************************/
-
-#pragma once
-
 #include "reset_device.hpp"
 
 #include <chrono>
@@ -41,30 +38,10 @@ static constexpr uint8_t kPolarityPressed = 1;
 #define TRACE_GROUP "ResetDevice"
 #endif  // MBED_CONF_MBED_TRACE_ENABLE
 
-namespace static_scheduling {
+namespace multi_tasking {
 
-static constexpr std::chrono::microseconds kTaskRunTime = 100000us;
-
-ResetDevice::ResetDevice(Timer& timer) : _resetButton(PUSH_BUTTON), _timer(timer) {
-    _resetButton.rise(callback(this, &ResetDevice::onRise));
+ResetDevice::ResetDevice(mbed::Callback<void()> cb) : _resetButton(PUSH_BUTTON) {
+    _resetButton.fall(cb);
 }
 
-bool ResetDevice::checkReset() {
-    std::chrono::microseconds initialTime = _timer.elapsed_time();
-    std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    bool resetDetect                      = false;
-
-    while (elapsedTime < kTaskRunTime) {
-        if (_resetButton.read() == kPolarityPressed) {
-            resetDetect = true;
-        }
-        elapsedTime = _timer.elapsed_time() - initialTime;
-    }
-    return resetDetect;
-}
-
-void ResetDevice::onRise() { _pressTime = _timer.elapsed_time(); }
-
-std::chrono::microseconds ResetDevice::getPressTime() { return _pressTime; }
-
-}  // namespace static_scheduling
+}  // namespace static_scheduling_with_event
