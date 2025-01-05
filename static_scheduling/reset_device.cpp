@@ -52,7 +52,7 @@ ResetDevice::ResetDevice(Timer& timer) : _resetButton(PUSH_BUTTON), _timer(timer
 bool ResetDevice::checkReset() {
     std::chrono::microseconds initialTime = _timer.elapsed_time();
     std::chrono::microseconds elapsedTime = std::chrono::microseconds::zero();
-    bool resetDetect = false;
+    bool resetDetect                      = false;
 
     while (elapsedTime < kTaskRunTime) {
         if (_resetButton.read() == kPolarityPressed) {
