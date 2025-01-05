@@ -1,0 +1,34 @@
+{
+    "macros": [
+      "MBED_CONF_MBED_TRACE_FEA_IPV6=0",
+      "MBED_BOOTLOADER_FLASH_BANK_SIZE=MBED_ROM_SIZE/2"
+    ],
+    "config": {
+      "main-stack-size": {
+       "value": 8192
+      }
+    },
+    "target_overrides": {
+      "*": {
+        "mbed-trace.enable": false,
+        "platform.stdio-convert-newlines": true,
+        "platform.stdio-baud-rate": 115200,
+        "platform.default-serial-baud-rate": 115200,
+        "platform.stdio-buffered-serial": true,
+        "target.printf_lib":"minimal-printf",
+        "platform.minimal-printf-enable-floating-point": true,
+        "platform.minimal-printf-set-floating-point-max-decimals": 2,
+        "platform.all-stats-enabled": true,
+        "platform.heap-stats-enabled": true,
+        "platform.stack-stats-enabled": true,
+        "update-client.storage-address": "(MBED_BOOTLOADER_FLASH_BANK_SIZE)",
+        "update-client.storage-size": "(MBED_BOOTLOADER_FLASH_BANK_SIZE)",
+        "update-client.storage-locations": 1    
+      },
+      "DISCO_H747I": {
+        "target.restrict_size": "0x20000",
+        "mbed-trace.enable": true,
+        "mbed-trace.max-level": "TRACE_LEVEL_DEBUG"
+      }
+    }
+  }
