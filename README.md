@@ -107,3 +107,15 @@ Test with different priorities and observe the behaviors and response time for e
 
 Therefor, if the priority is bellow normal, the reset thread might have to wait
 on three different thread to accompish its task.
+
+### Bootloader not fully working
+When starting the microcontroller, we can see that the updater is connected and ready to install a new application. The update client is started on launch.
+![image](https://github.com/user-attachments/assets/fb1ff747-2dde-4a16-befc-f4c22d6f12e9)
+
+When we are trying to send the application using a python script it seems like nothing is getting to the microcontroller. 
+![image](https://github.com/user-attachments/assets/51e1e14f-d60d-47fb-9e57-8043930d2ffc)
+Overall the function 'getSlotForCandidate()' and 'createCandidateApplications()' could not be correctly implemented.
+![image](https://github.com/user-attachments/assets/b45a7d99-b119-48f1-a028-27b580fb7351)
+
+
+
