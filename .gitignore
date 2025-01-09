@@ -11,3 +11,4 @@ update-client/candidate*
 update-client/cpp*
 update-client/mbed*
 update-client/u*
+bootloader/update-client
