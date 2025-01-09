@@ -6,9 +6,8 @@ advdembsof_library
 .venv
 requirements.txt
 mbed-bootloader-advembsof.bin
-update-client/block*
-update-client/candidate*
-update-client/cpp*
-update-client/mbed*
-update-client/u*
+update-client/*
 bootloader/update-client
+
+!update_client/my_candidate_applications.cpp
+!update_client/my_candidate_applications.hpp
