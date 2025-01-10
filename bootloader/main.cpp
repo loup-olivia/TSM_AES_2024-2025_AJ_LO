@@ -5,7 +5,7 @@
 #include "update-client/block_device_application.hpp"
 #include "update-client/uc_error_code.hpp"
 #include "update-client/usb_serial_uc.hpp"
-#include "update-client/my_candidate_applications.hpp"
+
 
 
 #if MBED_CONF_MBED_TRACE_ENABLE
